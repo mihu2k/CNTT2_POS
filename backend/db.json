@@ -1,0 +1,40 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "idProduct": "SP001",
+      "name": "TAI NGHE NHÉT TAI JBL TUNE 110 CHÍNH HÃNG",
+      "price": "390000",
+      "image": "https://cdn.jblstore.com.vn/UploadTemp/7960173a-1c8a-4c13-b761-f6d49a9713df.jpg"
+    },
+
+    {
+      "id": 2,
+      "idProduct": "SP002",
+      "name": "TAI NGHE TRÙM ĐẦU JBL TOUR ONE CHÍNH HÃNG",
+      "price": "1990000",
+      "image": "https://cdn.jblstore.com.vn/UploadTemp/19ce631d-5c6f-4b86-942c-bb5a0f32ce6a.png"
+    },
+    {
+      "id": 3,
+      "idProduct": "SP003",
+      "name": "TAI NGHE TRÙM ĐẦU JBL TOUR ONE CHÍNH HÃNG",
+      "price": "6990000",
+      "image": "https://cdn.jblstore.com.vn/UploadTemp/19ce631d-5c6f-4b86-942c-bb5a0f32ce6a.png"
+    },
+    {
+      "id": 4,
+      "idProduct": "SP004",
+      "name": "TAI NGHE THỂ THAO JBL ENDURANCE PEAK 2 CHÍNH HÃNG",
+      "price": "2990000",
+      "image": "https://cdn.jblstore.com.vn/UploadTemp/b21ae32f-98c9-4782-a2dd-d8c8bba6a2f5.png"
+    },
+    {
+      "id": 5,
+      "idProduct": "SP005",
+      "name": "TAI NGHE CHỤP TAI BLUETOOTH JBL E55BT QUINCY EDITION",
+      "price": "4490000",
+      "image": "https://cdn.jblstore.com.vn/UploadTemp/1ec81d1e-9f38-4009-828c-ab28a7e089d1.png"
+    }
+  ]
+}
