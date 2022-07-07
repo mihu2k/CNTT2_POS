@@ -5,9 +5,111 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  padding-right: unset !important;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+html {
+  overflow-x: hidden;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Scrollbar css */
+
+html *::-webkit-scrollbar {
+  border-radius: 0;
+  width: 8px;
+}
+
+html *::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+html *::-webkit-scrollbar-track {
+  border-radius: 0;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+button,
+input,
+[tabindex] {
+  outline: none;
+  border: none;
+}
+
+a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+/* Common */
+.mt-20px {
+  margin-top: 20px;
+}
+
+.ml-2px {
+  margin-left: 2px;
+}
+
+.ml-4px {
+  margin-left: 4px;
+}
+
+.ml-8px {
+  margin-left: 8px;
+}
+
+.ml-12px {
+  margin-left: 12px;
+}
+
+.ml-16px {
+  margin-left: 16px;
+}
+
+.mr-16px {
+  margin-right: 16px;
+}
+
+.pl-4px {
+  padding-left: 4px;
+}
+
+.d-f {
+  display: flex;
+}
+
+.d-f.j-c-between {
+  justify-content: space-between;
+}
+
+.f-grow-1 {
+  flex-grow: 1;
+}
+
+.f-shrink-0 {
+  flex-shrink: 0;
+}
+
+button.fz-16px {
+  font-size: 16px;
+}
+
+.mt-header {
+  margin-top: var(--default-layout-header-height, 60px);
+}
+
+/* Color */
+.gray {
+  color: #ccc;
 }
