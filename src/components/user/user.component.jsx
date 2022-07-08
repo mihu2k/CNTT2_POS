@@ -2,7 +2,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { useStyles } from './user.style';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
@@ -39,7 +39,13 @@ function User() {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleClose}>Thiết lập tài khoản</MenuItem>
+        <Link to="#">
+          <MenuItem onClick={handleClose}>Thiết lập tài khoản</MenuItem>
+        </Link>
+        <Link to="/">
+          <MenuItem onClick={handleClose}>Quản lý</MenuItem>
+        </Link>
+
         <MenuItem onClick={handleClose}>Logout</MenuItem>
       </Menu>
     </div>
