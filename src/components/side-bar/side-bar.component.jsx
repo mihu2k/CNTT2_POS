@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
-import { useStyles } from './dash-board.style';
+import { useStyles } from './side-bar.style';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -23,7 +23,6 @@ import CategoryIcon from '@mui/icons-material/Category';
 import { Outlet } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 // component
-import DashboardBody from './dashboard-body';
 import User from '../../components/user';
 
 const drawerWidth = 240;
@@ -95,7 +94,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-function DashBoard() {
+function SideBar({ children }) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -162,14 +161,16 @@ function DashBoard() {
             </ListItem>
           </List>
         </Link>
-        <List>
-          <ListItem button className={classes.sideBarBtn}>
-            <ListItemIcon>
-              <CategoryIcon />
-            </ListItemIcon>
-            <ListItemText primary="Sản phẩm" />
-          </ListItem>
-        </List>
+        <Link to={'/products'}>
+          <List>
+            <ListItem button className={classes.sideBarBtn}>
+              <ListItemIcon>
+                <CategoryIcon />
+              </ListItemIcon>
+              <ListItemText primary="Sản phẩm" />
+            </ListItem>
+          </List>
+        </Link>
         <Divider />
         <List>
           <ListItem button className={classes.sideBarBtn}>
@@ -192,11 +193,11 @@ function DashBoard() {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
-        <DashboardBody />
+        {children}
         <Outlet />
       </Box>
     </Box>
   );
 }
 
-export default DashBoard;
+export default SideBar;

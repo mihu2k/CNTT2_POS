@@ -21,6 +21,8 @@ export const useStyles = makeStyles((theme) => ({
   containerRow: {
     display: 'flex',
     margin: '20px',
+    maxHeight: '600px',
+    overflowY: 'scroll',
   },
 
   productWrap: {
@@ -53,11 +55,13 @@ export const useStyles = makeStyles((theme) => ({
     maxHeight: '90px',
     objectFit: 'cover',
   },
-  invoiceWrapper: {},
+  invoiceWrapper: {
+    maxHeight: '600px',
+  },
   invoice: {
     marginTop: '20px',
-    maxHeight: '90vh',
-    overflow: 'scroll',
+    height: '100%',
+    overflowY: 'scroll',
     '& table.MuiTable-root.css-1pclhgl-MuiTable-root': {
       minWidth: '100%',
     },

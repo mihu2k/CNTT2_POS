@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow';
 
 import Paper from '@mui/material/Paper';
 
-import { useStyles } from '../../pages/pos-page/pos-page.style';
+import { useStyles } from '../../pages/pos/pos-page.style';
 import { numberWithCommas } from '../../common/utils';
 
 export const ComponentToPrint = React.forwardRef((props, ref) => {
