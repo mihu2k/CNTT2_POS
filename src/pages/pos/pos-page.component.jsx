@@ -68,7 +68,7 @@ function Pos() {
       });
       setCart(newCart);
       localStorage.setItem('STORAGE_CART', JSON.stringify(newCart));
-      toast(`Đã thêm 1 sản phẩm có mã ${newItem.idProduct}!`);
+      toast(` đã thêm 1 sản phẩm có mã ${newItem.idProduct}!`);
     } else {
       let addingProduct = {
         ...product,
@@ -80,7 +80,7 @@ function Pos() {
         'STORAGE_CART',
         JSON.stringify([...cart, addingProduct]),
       );
-      toast(`Đã thêm 1 sản phẩm có mã ${addingProduct.idProduct}!`);
+      toast(` đã thêm 1 sản phẩm có mã ${addingProduct.idProduct}!`);
     }
   };
 
@@ -89,7 +89,7 @@ function Pos() {
     const newCart = cart.filter((cartItem) => cartItem.id !== product.id);
     setCart(newCart);
     localStorage.setItem('STORAGE_CART', JSON.stringify(newCart));
-    toast(`Đã xóa sản phẩm có mã ${product.idProduct}!`);
+    toast(` đã xóa sản phẩm có mã ${product.idProduct}!`);
   };
 
   // set totalAmount of all product in cart when  cart chnage
@@ -171,7 +171,7 @@ function Pos() {
                             </p>
 
                             <p className={classes.productPrice}>
-                              {numberWithCommas(product.price)} vnđ
+                              {numberWithCommas(product.price)} đ
                             </p>
                           </div>
                         </Grid>
@@ -246,10 +246,10 @@ function Pos() {
                                 {cartProduct.quantity}
                               </TableCell>
                               <TableCell align="right">
-                                {numberWithCommas(cartProduct.price)} vnđ
+                                {numberWithCommas(cartProduct.price)} đ
                               </TableCell>
                               <TableCell align="right">
-                                {numberWithCommas(cartProduct.totalAmount)} vnđ
+                                {numberWithCommas(cartProduct.totalAmount)} đ
                               </TableCell>
                               <TableCell align="center">
                                 <DeleteIcon
@@ -267,7 +267,7 @@ function Pos() {
                           Tạm tính
                         </TableCell>
                         <TableCell align="right">
-                          <span>{numberWithCommas(totalAmount)} vnd</span>
+                          <span>{numberWithCommas(totalAmount)} đ</span>
                         </TableCell>
                         <TableCell />
                       </TableRow>
@@ -290,7 +290,7 @@ function Pos() {
                             padding: '16px 0',
                           }}
                         >
-                          <p>{numberWithCommas(totalAmount)} vnd</p>
+                          <p>{numberWithCommas(totalAmount)} đ</p>
                         </TableCell>
 
                         <TableCell />
