@@ -15,6 +15,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ListItemText from '@mui/material/ListItemText';
 import GroupIcon from '@mui/icons-material/Group';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
@@ -161,6 +162,17 @@ function SideBar({ children }) {
             </ListItem>
           </List>
         </Link>
+        <Link to={'/orders'}>
+          <List>
+            <ListItem button className={classes.sideBarBtn}>
+              <ListItemIcon>
+                <BookmarkBorderIcon />
+              </ListItemIcon>
+              <ListItemText primary="Đơn hàng" />
+            </ListItem>
+          </List>
+        </Link>
+        <Divider />
         <Link to={'/products'}>
           <List>
             <ListItem button className={classes.sideBarBtn}>
