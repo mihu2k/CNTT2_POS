@@ -89,4 +89,21 @@ export const useStyles = makeStyles((theme) => ({
   recieptPaper: {
     margin: '50px',
   },
+
+  actionsBtns: {
+    margin: '0 20px 20px 20px',
+  },
+
+  // css for reciept
+  recieptPaperHeader: {},
+  customerInfo: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+  },
+  recieptPaperFooter: {
+    display: 'block',
+    textAlign: 'center',
+    margin: '36px 0',
+  },
 }));

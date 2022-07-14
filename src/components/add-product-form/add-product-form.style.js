@@ -14,4 +14,8 @@ export const useStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     fontSize: '1.1rem',
   },
+  actionBtns: {
+    display: 'flex',
+    gap: '20px',
+  },
 }));

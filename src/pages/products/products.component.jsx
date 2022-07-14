@@ -6,7 +6,6 @@ import Button from '@mui/material/Button';
 import { emphasize, styled } from '@mui/material/styles';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Chip from '@mui/material/Chip';
-import HomeIcon from '@mui/icons-material/Home';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 // import { numberWithCommas } from '../../common/utils';
@@ -43,6 +42,10 @@ function Products() {
     event.preventDefault();
     console.info('You clicked a breadcrumb.');
   }
+  const callbackFunction = (childData) => {
+    setAddProduct(childData);
+    console.log(childData);
+  };
   const [addProduct, setAddProduct] = React.useState(false);
 
   return (
@@ -75,7 +78,12 @@ function Products() {
           <div>
             <div role="presentation" onClick={handleClick}>
               <Breadcrumbs aria-label="breadcrumb">
-                <StyledBreadcrumb component="a" href="#" label="Sản phẩm" />
+                <StyledBreadcrumb
+                  component="a"
+                  href="#"
+                  label="Sản phẩm"
+                  onClick={() => setAddProduct(false)}
+                />
                 <StyledBreadcrumb
                   label="Thêm sản phẩm"
                   deleteIcon={<ExpandMoreIcon />}
@@ -87,7 +95,11 @@ function Products() {
         )}
 
         <div className={classes.container}>
-          {!addProduct ? <ProductsTable /> : <CreateProductForm />}
+          {!addProduct ? (
+            <ProductsTable />
+          ) : (
+            <CreateProductForm parentCallback={callbackFunction} />
+          )}
         </div>
       </div>
 

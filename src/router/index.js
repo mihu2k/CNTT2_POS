@@ -6,6 +6,7 @@ import HomePage from '../pages/home';
 import PosPage from '../pages/pos';
 import ProductsPage from '../pages/products';
 import OrdersPage from '../pages/orders';
+import EmployeePage from '../pages/employee';
 const pages = (path) => lazy(() => import(`../pages/${path}`));
 
 const AppRouter = () => {
@@ -20,6 +21,7 @@ const AppRouter = () => {
         <Route path="/pos" element={<PosPage />} />
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/orders" element={<OrdersPage />} />
+        <Route path="/employee" element={<EmployeePage />} />
       </Routes>
     </Suspense>
   );

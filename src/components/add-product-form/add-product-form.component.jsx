@@ -22,7 +22,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { SketchPicker } from 'react-color';
 
-function CreateProductForm() {
+function CreateProductForm(props) {
   const classes = useStyles();
   const Input = styled('input')({
     display: 'none',
@@ -36,7 +36,6 @@ function CreateProductForm() {
   // const [products, setProducts] = React.useState([]);
   // const [isLoading, setIsLoading] = React.useState(false);
   const [category, setCategory] = React.useState('');
-
   const handleChange = (e) => {
     setCategory(e.target.value);
   };
@@ -86,6 +85,12 @@ function CreateProductForm() {
   // React.useEffect(() => {
   //   fetchProducts();
   // }, []);
+
+  let closeAddProducts = false;
+  const sendData = () => {
+    props.parentCallback(closeAddProducts);
+  };
+  console.log(closeAddProducts);
 
   return (
     <div className={classes.content}>
@@ -232,9 +237,16 @@ function CreateProductForm() {
                 disabled
               />
             </Grid>
-            <Grid item xs={12} mt={2}>
+            <Grid item xs={12} mt={2} className={classes.actionBtns}>
               <Button variant="contained">Tạo sản phẩm</Button>
-              <Button variant="text">Hủy</Button>
+              <Button
+                variant="text"
+                onClick={() => {
+                  sendData();
+                }}
+              >
+                Hủy
+              </Button>
             </Grid>
           </form>
         </Grid>
