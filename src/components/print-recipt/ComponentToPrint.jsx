@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
@@ -11,13 +10,39 @@ import Paper from '@mui/material/Paper';
 
 import { useStyles } from '../../pages/pos/pos-page.style';
 import { numberWithCommas } from '../../common/utils';
-
 export const ComponentToPrint = React.forwardRef((props, ref) => {
   const { cart, totalAmount } = props;
   const classes = useStyles();
 
   return (
     <div ref={ref} className={classes.recieptPaper}>
+      <div className={classes.recieptPaperHeader}>
+        <h4>Rene</h4>
+        <h4>Số điện thoại: 19006017</h4>
+        <h4>
+          Địa chỉ: Tầng 6 TTTM Giga Mall, 240, 242 Đ. Phạm Văn Đồng, Hiệp Bình
+          Chánh, Thủ Đức, Thành phố Hồ Chí Minh 700000, Việt Nam.
+        </h4>
+        <h2 style={{ textAlign: 'center', margin: '20px 0' }}>
+          HÓA ĐƠN THANH TOÁN
+        </h2>
+
+        <div className={classes.customerInfo}>
+          <p>
+            Ngày bán <span>14/07/2022 22:24:53</span>
+          </p>
+          <p>
+            Khách hàng <span>Phạm Quốc Vương</span>
+          </p>
+
+          <p>
+            Số điện thoại <span>0369830702</span>
+          </p>
+          <p>
+            Địa chỉ: <span>200/12/6 Lê Văn Lương, Quận 7</span>
+          </p>
+        </div>
+      </div>
       <TableContainer component={Paper} className={classes.invoice}>
         <Table sx={{ minWidth: 700 }} aria-label="spanning table">
           <TableHead>
@@ -89,6 +114,9 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <div className={classes.recieptPaperFooter}>
+        <p>Cảm ơn quý khách, hẹn gặp lại!</p>
+      </div>
     </div>
   );
 });

@@ -3,7 +3,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import { FormControlLabel } from '@material-ui/core';
 import SearchIcon from '@mui/icons-material/Search';
 import EditIcon from '@mui/icons-material/Edit';
-import { blue } from '@material-ui/core/colors';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { blue, red } from '@material-ui/core/colors';
 import { useStyles } from './products-table.style';
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
@@ -37,6 +38,16 @@ function ProductsTable() {
     console.log(category);
   };
 
+  const currencyFormatter = new Intl.NumberFormat('it-IT', {
+    style: 'currency',
+    currency: 'VND',
+  });
+
+  const vndPrice = {
+    type: 'number',
+    width: 130,
+    valueFormatter: ({ value }) => currencyFormatter.format(value),
+  };
   const columns = [
     {
       field: 'id',
@@ -52,7 +63,7 @@ function ProductsTable() {
       headerName: 'Giá',
       type: 'number',
       width: 120,
-      format: (value) => value.toLocaleString('en-US'),
+      ...vndPrice,
     },
     { field: 'status', headerName: 'Trạng thái', width: 130 },
     { field: 'category', headerName: 'Category', width: 130 },
@@ -67,7 +78,7 @@ function ProductsTable() {
       field: 'actions',
       headerName: 'Thao tác',
       sortable: false,
-      width: 80,
+      width: 120,
       disableClickEventBubbling: true,
       align: 'right',
       renderCell: (params) => {
@@ -85,18 +96,35 @@ function ProductsTable() {
       // some action
       console.log(index);
     };
+    const handleDeleteClick = () => {
+      // some action
+      console.log(index);
+    };
     return (
-      <FormControlLabel
-        control={
-          <IconButton
-            color="secondary"
-            aria-label="add an alarm"
-            onClick={handleEditClick}
-          >
-            <EditIcon style={{ color: blue[500] }} />
-          </IconButton>
-        }
-      />
+      <div>
+        <FormControlLabel
+          control={
+            <IconButton
+              color="secondary"
+              aria-label="add an alarm"
+              onClick={handleEditClick}
+            >
+              <EditIcon style={{ color: blue[500] }} />
+            </IconButton>
+          }
+        />
+        <FormControlLabel
+          control={
+            <IconButton
+              color="secondary"
+              aria-label="add an alarm"
+              onClick={handleDeleteClick}
+            >
+              <DeleteIcon style={{ color: red[500] }} />
+            </IconButton>
+          }
+        />
+      </div>
     );
   };
 

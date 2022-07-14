@@ -184,23 +184,27 @@ function SideBar({ children }) {
           </List>
         </Link>
         <Divider />
-        <List>
-          <ListItem button className={classes.sideBarBtn}>
-            <ListItemIcon>
-              <GroupIcon />
-            </ListItemIcon>
-            <ListItemText primary="Nhân viên" />
-          </ListItem>
-        </List>
+        <Link to={'/employee'}>
+          <List>
+            <ListItem button className={classes.sideBarBtn}>
+              <ListItemIcon>
+                <GroupIcon />
+              </ListItemIcon>
+              <ListItemText primary="Nhân viên" />
+            </ListItem>
+          </List>
+        </Link>
         <Divider />
-        <List>
-          <ListItem button className={classes.sideBarBtn}>
-            <ListItemIcon>
-              <AssessmentIcon />
-            </ListItemIcon>
-            <ListItemText primary="Báo Cáo" />
-          </ListItem>
-        </List>
+        <Link to={'/'}>
+          <List>
+            <ListItem button className={classes.sideBarBtn}>
+              <ListItemIcon>
+                <AssessmentIcon />
+              </ListItemIcon>
+              <ListItemText primary="Báo Cáo" />
+            </ListItem>
+          </List>
+        </Link>
         <Divider />
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
