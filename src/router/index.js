@@ -1,27 +1,27 @@
-import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Loading from '../components/loading/loading.component';
-import SignInSide from '../pages/sign-in/sign-in.component';
 import HomePage from '../pages/home';
+import OrdersPage from '../pages/orders';
 import PosPage from '../pages/pos';
 import ProductsPage from '../pages/products';
-import OrdersPage from '../pages/orders';
-const pages = (path) => lazy(() => import(`../pages/${path}`));
+import SignInSide from '../pages/sign-in/sign-in.component';
+import ProtectedRoutes from './protected.route';
+import PublicRoutes from './public.route';
 
 const AppRouter = () => {
   return (
-    <Suspense fallback={<Loading />}>
-      <Routes>
-        <Route path="/" element={<HomePage />}>
-          {/* <Route index element={<Loading />} /> */}
-          <Route path="*" element={<Loading />} />
-        </Route>
-        <Route path="/login" element={<SignInSide />} />
-        <Route path="/pos" element={<PosPage />} />
-        <Route path="/products" element={<ProductsPage />} />
-        <Route path="/orders" element={<OrdersPage />} />
-      </Routes>
-    </Suspense>
+    <Routes>
+      <Route path="/" element={<ProtectedRoutes />}>
+        <Route path="dashboard" element={<HomePage />} />
+        <Route path="pos" element={<PosPage />} />
+        <Route path="products" element={<ProductsPage />} />
+        <Route path="orders" element={<OrdersPage />} />
+      </Route>
+
+      <Route path="/" element={<PublicRoutes />}>
+        <Route index path="login" element={<SignInSide />} />
+      </Route>
+    </Routes>
   );
 };
 
