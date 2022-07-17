@@ -8,7 +8,7 @@ function HomePage() {
   return (
     <div>
       <SideBar>
-        <DashBoard></DashBoard>
+        <DashBoard />
       </SideBar>
     </div>
   );

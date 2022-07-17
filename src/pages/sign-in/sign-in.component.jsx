@@ -13,19 +13,48 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from '../../components/copyright/copyright.component';
+import * as yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginRequest } from '../../redux/actions/auth.action';
+import { useLocation, useNavigate } from 'react-router-dom';
+import * as types from '../../redux/types';
+import routes from '../../router/list.route';
 
 const theme = createTheme();
+const schema = yup.object().shape({
+  username: yup.string().required('Vui lòng nhập username.'),
+  password: yup
+    .string()
+    .required('Vui lòng nhập mật khẩu.')
+    .min(6, 'Mật khẩu phải ít nhất 6 kí tự.'),
+});
 
 export default function SignInSide() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { auth: authSelector } = useSelector((state) => state);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: 'onChange',
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = (data) => {
+    dispatch(loginRequest(data, navigate));
   };
+
+  React.useEffect(() => {
+    if (authSelector.status === types.LOGIN_SUCCESS) {
+      navigate(location.state?.from ?? routes.dashboard);
+    }
+  }, [authSelector]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -40,7 +69,9 @@ export default function SignInSide() {
             backgroundImage: 'url(https://source.unsplash.com/random)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+              t.palette.mode === 'light'
+                ? t.palette.grey[50]
+                : t.palette.grey[900],
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
@@ -61,16 +92,21 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit(onSubmit)}
+              sx={{ mt: 1 }}
+            >
               <TextField
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                label="User name"
                 autoFocus
+                {...register('username')}
+                error={!!errors?.username?.message}
+                helperText={errors?.username?.message}
               />
               <TextField
                 margin="normal"
@@ -81,6 +117,9 @@ export default function SignInSide() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                {...register('password')}
+                error={!!errors?.password?.message}
+                helperText={errors?.password?.message}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}

@@ -46,7 +46,7 @@ function User() {
           <MenuItem onClick={handleClose}>Quản lý</MenuItem>
         </Link>
 
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        <MenuItem onClick={handleClose}>Đăng xuất</MenuItem>
       </Menu>
     </div>
   );
