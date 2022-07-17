@@ -42,6 +42,17 @@ function OrdersTable() {
     setOrderStatus(event.target.value);
   };
   // orders columns
+  const currencyFormatter = new Intl.NumberFormat('it-IT', {
+    style: 'currency',
+    currency: 'VND',
+  });
+
+  const vndPrice = {
+    type: 'number',
+    width: 130,
+    valueFormatter: ({ value }) => currencyFormatter.format(value),
+  };
+
   const ordersColumns = [
     {
       field: 'id',
@@ -79,6 +90,7 @@ function OrdersTable() {
       align: 'right',
       type: 'number',
       width: 120,
+      ...vndPrice,
     },
     { field: 'status', headerName: 'Trạng thái', width: 130, align: 'center' },
     {

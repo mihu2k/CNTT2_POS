@@ -1,4 +1,21 @@
 {
+  "employee": [
+    {
+      "id": 1,
+      "userName": "minhu2k",
+      "email": "minhu2k@gmail.com",
+      "fullName": "Trương Minh Hưng",
+      "role": "Nhân viên"
+    },
+    {
+      "id": 2,
+      "userName": "vuongpham",
+      "email": "phmqucvuong@gmail.com",
+      "fullName": "Phạm Quốc Vương",
+      "role": "Nhân viên"
+    }
+  ],
+
   "orders": [
     {
       "id": 1,

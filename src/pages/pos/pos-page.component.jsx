@@ -14,6 +14,12 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Paper from '@mui/material/Paper';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useStyles } from './pos-page.style';
 import User from '../../components/user';
@@ -44,6 +50,10 @@ function Pos() {
     JSON.parse(localStorage.getItem('STORAGE_AMOUNT')),
   );
 
+  const [newCustomer, setNewCustomer] = React.useState(false);
+  const handleClose = () => {
+    setNewCustomer(false);
+  };
   // add product into cart
   const addProductToCart = async (product) => {
     //check if the adding product exist
@@ -223,7 +233,11 @@ function Pos() {
                           />
                         </TableCell>
                         <TableCell colSpan={1}>
-                          <Button fullWidth variant="text">
+                          <Button
+                            fullWidth
+                            variant="text"
+                            onClick={() => setNewCustomer(true)}
+                          >
                             Thêm mới
                           </Button>
                         </TableCell>
@@ -319,6 +333,54 @@ function Pos() {
           </Grid>
         </Box>
       </div>
+      <form method="post" autoComplete="off">
+        <Dialog open={newCustomer} onClose={handleClose}>
+          <DialogTitle>Thêm khách hàng mới</DialogTitle>
+          <DialogContent>
+            {/* <DialogContentText>
+              To subscribe to this website, please enter your email address
+              here. We will send updates occasionally.
+            </DialogContentText> */}
+            <TextField
+              autoFocus
+              margin="dense"
+              label="Tên khách hàng"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              margin="dense"
+              label="Email"
+              type="email"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              margin="dense"
+              label="Số điện thoại"
+              type="tel"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              margin="dense"
+              label="Địa chỉ"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+          </DialogContent>
+          <DialogActions className={classes.actionsBtns}>
+            <Button variant="outlined" onClick={handleClose}>
+              Hủy
+            </Button>
+            <Button variant="contained" onClick={handleClose}>
+              Thêm khách hàng
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </form>
 
       <ToastContainer />
     </div>
