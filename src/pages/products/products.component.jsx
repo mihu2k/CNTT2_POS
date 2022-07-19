@@ -47,9 +47,12 @@ function Products() {
     console.log(childData);
   };
   const [addProduct, setAddProduct] = React.useState(false);
-
   return (
-    <SideBar>
+    <SideBar
+      onClick={() => {
+        setAddProduct(false);
+      }}
+    >
       <div className={classes.wrapper}>
         {!addProduct ? (
           <div className={classes.header}>

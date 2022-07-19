@@ -95,7 +95,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-function SideBar({ children }) {
+function SideBar({ children, onClick }) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -175,7 +175,7 @@ function SideBar({ children }) {
         <Divider />
         <Link to={'/products'}>
           <List>
-            <ListItem button className={classes.sideBarBtn}>
+            <ListItem button className={classes.sideBarBtn} onClick={onClick}>
               <ListItemIcon>
                 <CategoryIcon />
               </ListItemIcon>
@@ -186,7 +186,7 @@ function SideBar({ children }) {
         <Divider />
         <Link to={'/employee'}>
           <List>
-            <ListItem button className={classes.sideBarBtn}>
+            <ListItem button className={classes.sideBarBtn} onClick={onClick}>
               <ListItemIcon>
                 <GroupIcon />
               </ListItemIcon>
