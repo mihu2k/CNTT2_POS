@@ -18,6 +18,24 @@ export const loginRequest = (data) => async (dispatch) => {
   }
 };
 
+export const checkTokenRequest =
+  (token, navigate, from) => async (dispatch) => {
+    dispatch({ type: types.CHECK_TOKEN_REQUEST });
+
+    try {
+      const response = await AuthService.checkToken(token);
+      console.log('REGISTER SUCCESS', response);
+      dispatch({ type: types.CHECK_TOKEN_SUCCESS, payload: response });
+    } catch (error) {
+      console.log(error, 'ERROR REQ');
+      dispatch({ type: types.CHECK_TOKEN_FAILURE, payload: error });
+      localStorage.removeItem('token');
+      navigate(routes.login, {
+        state: { from },
+      });
+    }
+  };
+
 export const logoutRequest = () => (dispatch) => {
   dispatch({ type: types.LOGOUT });
 };

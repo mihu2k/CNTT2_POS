@@ -1,38 +1,56 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControl from '@mui/material/FormControl';
+import Grid from '@mui/material/Grid';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Paper from '@mui/material/Paper';
+import Select from '@mui/material/Select';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Paper from '@mui/material/Paper';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
+import * as React from 'react';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useStyles } from './pos-page.style';
 import User from '../../components/user';
-import axios from 'axios';
+import { useStyles } from './pos-page.style';
 
-import { numberWithCommas } from '../../common/utils';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useDispatch, useSelector } from 'react-redux';
 import { useReactToPrint } from 'react-to-print';
+import 'react-toastify/dist/ReactToastify.css';
+import { numberWithCommas, showToastMsg } from '../../common/utils';
 import { ComponentToPrint } from '../../components/print-recipt/ComponentToPrint';
+import ProductBox from '../../components/product-box/product-box.component';
+import useDebounce from '../../hooks/useDebounce';
+import { getProductsRequest } from '../../redux/actions/product.action';
+import { createOrderRequest } from '../../redux/actions/order.action';
+import * as types from '../../redux/types';
+
+const phoneRegExp = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
+const emailRegExp =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 function Pos() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const [query, setQuery] = React.useState({ search: '', per_page: 10 });
+  const [productsOrder, setProductsOrder] = React.useState([]);
+
+  const {
+    product: productReducer,
+    auth: authSelector,
+    order: orderSelector,
+  } = useSelector((state) => state);
 
   // start invoice cpn
   const [selectUser, setSelectUser] = React.useState(1);
@@ -41,102 +59,101 @@ function Pos() {
   };
   // end invoice cpn
 
-  const [products, setProducts] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [cart, setCart] = React.useState(
-    JSON.parse(localStorage.getItem('STORAGE_CART')) || [],
-  );
-  const [totalAmount, setTotalAmount] = React.useState(
-    JSON.parse(localStorage.getItem('STORAGE_AMOUNT')),
-  );
 
-  const [newCustomer, setNewCustomer] = React.useState(false);
-  const handleClose = () => {
-    setNewCustomer(false);
+  const [infoCustomer, setInfoCustomer] = React.useState({
+    email: '',
+    address: '',
+    fullName: '',
+    phone: '',
+  });
+
+  const handleChange = (e) => {
+    setInfoCustomer((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-  // add product into cart
-  const addProductToCart = async (product) => {
-    //check if the adding product exist
-    let findProductInCart = await cart.find((item) => {
-      return item.id === product.id;
-    });
 
-    if (findProductInCart) {
-      let newCart = [];
-      let newItem;
-      cart.forEach((cartItem) => {
-        if (cartItem.id === product.id) {
-          newItem = {
-            ...cartItem,
-            quantity: cartItem.quantity + 1,
-            totalAmount: cartItem.price * (cartItem.quantity + 1),
-          };
-          newCart.push(newItem);
-        } else {
-          newCart.push(cartItem);
-        }
-      });
-      setCart(newCart);
-      localStorage.setItem('STORAGE_CART', JSON.stringify(newCart));
-      toast(` đã thêm 1 sản phẩm có mã ${newItem.idProduct}!`);
-    } else {
-      let addingProduct = {
-        ...product,
-        quantity: 1,
-        totalAmount: product.price,
-      };
-      setCart([...cart, addingProduct]);
-      localStorage.setItem(
-        'STORAGE_CART',
-        JSON.stringify([...cart, addingProduct]),
-      );
-      toast(` đã thêm 1 sản phẩm có mã ${addingProduct.idProduct}!`);
+  const handleSubmit = () => {
+    if (
+      !infoCustomer.email.match(emailRegExp) ||
+      infoCustomer.fullName === '' ||
+      !infoCustomer.phone.match(phoneRegExp)
+    ) {
+      showToastMsg('error', 'Thông tin sai.', { toastId: 1 });
+      return;
     }
+    const data = {
+      ...infoCustomer,
+      products: productsOrder,
+      total: productsOrder.reduce(
+        (total, product) => total + product.price * product.quantity,
+        0,
+      ),
+    };
+    dispatch(createOrderRequest(data));
   };
 
-  // Delete product out of cart
-  const removeProduct = async (product) => {
-    const newCart = cart.filter((cartItem) => cartItem.id !== product.id);
-    setCart(newCart);
-    localStorage.setItem('STORAGE_CART', JSON.stringify(newCart));
-    toast(` đã xóa sản phẩm có mã ${product.idProduct}!`);
+  const removeProductOrder = (product) => {
+    const newStore = [...productsOrder];
+    const newProduct = newStore.filter(
+      (item) =>
+        item._id !== product._id || item.colorValue !== product.colorValue,
+    );
+    setProductsOrder(newProduct);
   };
 
-  // set totalAmount of all product in cart when  cart chnage
-  React.useEffect(() => {
-    let newTotalAmount = 0;
-    if (cart) {
-      cart.forEach((itemCart) => {
-        newTotalAmount = newTotalAmount + parseInt(itemCart.totalAmount);
-      });
-      setTotalAmount(newTotalAmount);
-      localStorage.setItem(
-        'STORAGE_TOTAL_AMOUNT',
-        JSON.stringify(newTotalAmount),
-      );
-    }
-  }, [cart]);
-
-  // print recipt function
+  // print receipt function
   const componentRef = React.useRef();
   const handleReactToPrint = useReactToPrint({
     content: () => componentRef.current,
   });
-  const handlePrint = () => {
-    handleReactToPrint();
+
+  const handlePushToOrder = (product, color) => {
+    const newStore = [...productsOrder];
+
+    const index = newStore.findIndex(
+      (item) => item._id === product._id && item.colorValue === color.value,
+    );
+    const data = {
+      ...product,
+      colorValue: color.value,
+      colorName: color.name,
+      colorImage: color.image,
+      quantity: 1,
+    };
+
+    if (index > -1) {
+      newStore[index].quantity = newStore[index].quantity + 1;
+    } else {
+      newStore.push(data);
+    }
+    setProductsOrder(newStore);
   };
 
-  // fetch data from JSON server
+  const fetchProducts = (query = {}) => {
+    dispatch(getProductsRequest(query));
+  };
+
+  const debouncedValue = useDebounce(query, 500);
+
   React.useEffect(() => {
-    fetchProducts();
+    // if (!debouncedValue.search.trim()) {
+    //   return;
+    // }
+    dispatch(getProductsRequest(query));
+  }, [debouncedValue]);
+
+  React.useEffect(() => {
+    fetchProducts(query);
   }, []);
 
-  const fetchProducts = async () => {
-    setIsLoading(true);
-    const result = await axios.get('products');
-    setProducts(await result.data);
-    setIsLoading(false);
-  };
+  React.useEffect(() => {
+    if (orderSelector.status === types.CREATE_ORDER_SUCCESS) {
+      showToastMsg('success', 'Thanh toán thành công.', {
+        onClose: () => handleReactToPrint(),
+        autoClose: 2500,
+      });
+    }
+  }, [orderSelector]);
 
   return (
     <div>
@@ -146,6 +163,9 @@ function Pos() {
             type="text"
             className={classes.searchInput}
             placeholder={'Tìm hàng hóa'}
+            onChange={(e) =>
+              setQuery((prev) => ({ ...prev, search: e.target.value }))
+            }
           />
         </div>
         <User />
@@ -159,35 +179,42 @@ function Pos() {
                 'Loading'
               ) : (
                 <div className={classes.containerRow}>
-                  <Grid container spacing={2}>
-                    {
-                      // eslint-disable-next-line array-callback-return
-                      products.map((product, index) => (
-                        <Grid key={index} item xs={4}>
-                          <div
-                            className={classes.productWrap}
-                            onClick={() => addProductToCart(product)}
-                          >
-                            <img
-                              src={product.image}
-                              className={classes.imgFluid}
-                              alt={product.name}
-                            />
-                            <p className={classes.productName}>
-                              {product.name}
-                            </p>
-                            <p className={classes.productId}>
-                              Mã sản phẩm: {product.idProduct}
-                            </p>
-
-                            <p className={classes.productPrice}>
-                              {numberWithCommas(product.price)} đ
-                            </p>
-                          </div>
-                        </Grid>
-                      ))
+                  <InfiniteScroll
+                    dataLength={productReducer.products?.length}
+                    next={() => {
+                      setQuery((prev) => ({
+                        ...query,
+                        per_page: prev.per_page + 10,
+                      }));
+                      fetchProducts({
+                        ...query,
+                        per_page: query.per_page + 10,
+                      });
+                    }}
+                    hasMore={
+                      productReducer.products?.length <
+                      productReducer.totalRecord
                     }
-                  </Grid>
+                    loader={<h4>Loading...</h4>}
+                  >
+                    <Grid container spacing={2}>
+                      {productReducer.products?.length > 0 ? (
+                        productReducer.products?.map((product) => (
+                          <ProductBox
+                            key={product._id}
+                            product={product}
+                            onPush={handlePushToOrder}
+                          />
+                        ))
+                      ) : (
+                        <p>
+                          {query.search
+                            ? 'Không tìm thấy sản phẩm nào.'
+                            : 'Chưa có sản phẩm nào.'}
+                        </p>
+                      )}
+                    </Grid>
+                  </InfiniteScroll>
                 </div>
               )}
             </Grid>
@@ -195,194 +222,209 @@ function Pos() {
             <Grid item xs={5} className={classes.invoiceWrapper}>
               <div style={{ display: 'none' }}>
                 <ComponentToPrint
-                  cart={cart}
-                  totalAmount={totalAmount}
+                  order={orderSelector.order}
                   ref={componentRef}
                 />
               </div>
 
-              <form>
-                <TableContainer component={Paper} className={classes.invoice}>
-                  <Table aria-label="spanning table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell colSpan={2}>
-                          <FormControl sx={{ m: 1, minWidth: '100%' }}>
-                            <InputLabel id="demo-simple-select-autowidth-label">
-                              Nhân viên
-                            </InputLabel>
-                            <Select
-                              labelId="demo-simple-select-autowidth-label"
-                              id="demo-simple-select-autowidth"
-                              value={selectUser}
-                              onChange={handleChangeUser}
-                              autoWidth
-                              label="Nhân viên"
-                            >
-                              <MenuItem value={0}>Rene</MenuItem>
-                              <MenuItem value={1}>Trương Minh Hưng</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </TableCell>
-                        <TableCell colSpan={2}>
-                          <TextField
-                            fullWidth
-                            id="outlined-basic"
-                            label="Nhập email khách hàng"
-                            variant="outlined"
-                          />
-                        </TableCell>
-                        <TableCell colSpan={1}>
-                          <Button
-                            fullWidth
-                            variant="text"
-                            onClick={() => setNewCustomer(true)}
+              <TableContainer component={Paper} className={classes.invoice}>
+                <Table aria-label="spanning table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell colSpan={2}>
+                        <FormControl sx={{ m: 1, minWidth: '100%' }}>
+                          <InputLabel id="demo-simple-select-autowidth-label">
+                            Nhân viên
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-autowidth-label"
+                            id="demo-simple-select-autowidth"
+                            value={selectUser}
+                            onChange={handleChangeUser}
+                            autoWidth
+                            label="Nhân viên"
+                            disabled
                           >
-                            Thêm mới
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-
-                      <TableRow>
-                        <TableCell>Mã sản phẩm </TableCell>
-                        <TableCell align="right">Số lượng</TableCell>
-                        <TableCell align="right">Giá</TableCell>
-                        <TableCell align="right">Tổng giá</TableCell>
-                        <TableCell align="center">Xóa</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody style={{ overflowY: 'scroll' }}>
-                      {cart
-                        ? cart.map((cartProduct, key) => (
-                            <TableRow key={key}>
-                              <TableCell>{cartProduct.idProduct}</TableCell>
-                              <TableCell align="right">
-                                {cartProduct.quantity}
-                              </TableCell>
-                              <TableCell align="right">
-                                {numberWithCommas(cartProduct.price)} đ
-                              </TableCell>
-                              <TableCell align="right">
-                                {numberWithCommas(cartProduct.totalAmount)} đ
-                              </TableCell>
-                              <TableCell align="center">
-                                <DeleteIcon
-                                  style={{ cursor: 'pointer' }}
-                                  onClick={() => removeProduct(cartProduct)}
-                                />
-                              </TableCell>
-                            </TableRow>
-                          ))
-                        : undefined}
-
-                      <TableRow>
-                        <TableCell />
-                        <TableCell align="right" colSpan={2}>
-                          Tạm tính
-                        </TableCell>
-                        <TableCell align="right">
-                          <span>{numberWithCommas(totalAmount)} đ</span>
-                        </TableCell>
-                        <TableCell />
-                      </TableRow>
-                      <TableRow>
-                        <TableCell />
-                        <TableCell
-                          align="right"
-                          colSpan={2}
-                          style={{ fontWeight: 'bold', fontSize: 'large' }}
+                            {/* <MenuItem value={0}>Rene</MenuItem> */}
+                            <MenuItem value={1}>
+                              {authSelector.profile?.full_name}
+                            </MenuItem>
+                          </Select>
+                        </FormControl>
+                      </TableCell>
+                      {/* <TableCell colSpan={3}>
+                        <Button
+                          fullWidth
+                          variant="text"
+                          onClick={() => setNewCustomer(true)}
                         >
-                          Tổng cộng
-                        </TableCell>
+                          Thông tin khách hàng
+                        </Button>
+                      </TableCell> */}
+                    </TableRow>
 
-                        <TableCell
-                          align="right"
-                          style={{
-                            fontWeight: 'bold',
-                            fontSize: 'large',
-                            display: 'block',
-                            padding: '16px 0',
-                          }}
-                        >
-                          <p>{numberWithCommas(totalAmount)} đ</p>
-                        </TableCell>
+                    <TableRow>
+                      <TableCell colSpan={3}>
+                        <TextField
+                          autoFocus
+                          margin="dense"
+                          label="Tên khách hàng"
+                          type="text"
+                          fullWidth
+                          variant="standard"
+                          name="fullName"
+                          value={infoCustomer.fullName}
+                          onChange={handleChange}
+                        />
+                      </TableCell>
+                      <TableCell colSpan={3}>
+                        <TextField
+                          margin="dense"
+                          label="Email"
+                          type="email"
+                          name="email"
+                          fullWidth
+                          variant="standard"
+                          value={infoCustomer.email}
+                          onChange={handleChange}
+                        />
+                      </TableCell>
+                    </TableRow>
 
-                        <TableCell />
-                      </TableRow>
-                    </TableBody>
-                  </Table>
+                    <TableRow>
+                      <TableCell colSpan={3}>
+                        <TextField
+                          margin="dense"
+                          label="Số điện thoại"
+                          type="tel"
+                          name="phone"
+                          fullWidth
+                          variant="standard"
+                          value={infoCustomer.phone}
+                          onChange={handleChange}
+                        />
+                      </TableCell>
+                      <TableCell colSpan={3}>
+                        <TextField
+                          margin="dense"
+                          label="Địa chỉ"
+                          type="text"
+                          name="address"
+                          fullWidth
+                          variant="standard"
+                          value={infoCustomer.address}
+                          onChange={handleChange}
+                        />
+                      </TableCell>
+                    </TableRow>
 
-                  <div className={classes.invoiceFooter}>
-                    {totalAmount !== 0 ? (
-                      <Button
-                        className={classes.invoicePaymentBtn}
-                        variant="contained"
-                        onClick={handlePrint}
+                    <TableRow>
+                      <TableCell>Mã sản phẩm </TableCell>
+                      <TableCell align="right">Số lượng</TableCell>
+                      <TableCell align="right">Giá</TableCell>
+                      <TableCell align="right">Tổng giá</TableCell>
+                      <TableCell align="center">Xóa</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody style={{ overflowY: 'scroll' }}>
+                    {productsOrder.length > 0
+                      ? productsOrder?.map((product) => (
+                          <TableRow key={product._id + product.colorValue}>
+                            <TableCell>
+                              {product.code}&nbsp;({product.colorName})
+                            </TableCell>
+                            <TableCell align="right">
+                              {product.quantity}
+                            </TableCell>
+                            <TableCell align="right">
+                              {numberWithCommas(product.price)}&nbsp;&#8363;
+                            </TableCell>
+                            <TableCell align="right">
+                              {numberWithCommas(
+                                product.price * product.quantity,
+                              )}
+                              &nbsp;&#8363;
+                            </TableCell>
+                            <TableCell align="center">
+                              <DeleteIcon
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => removeProductOrder(product)}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      : null}
+
+                    <TableRow>
+                      <TableCell />
+                      <TableCell align="right" colSpan={2}>
+                        Tạm tính
+                      </TableCell>
+                      <TableCell align="right">
+                        <span>
+                          {numberWithCommas(
+                            productsOrder.reduce(
+                              (total, product) =>
+                                total + product.price * product.quantity,
+                              0,
+                            ),
+                          )}
+                          &nbsp;&#8363;
+                        </span>
+                      </TableCell>
+                      <TableCell />
+                    </TableRow>
+                    <TableRow>
+                      <TableCell />
+                      <TableCell
+                        align="right"
+                        colSpan={2}
+                        style={{ fontWeight: 'bold', fontSize: 'large' }}
                       >
-                        Thanh toán
-                      </Button>
-                    ) : (
-                      <span className={classes.invoicePaymentText}>
-                        Chưa có sản phẩm nào trong giỏ hàng!
-                      </span>
-                    )}
-                  </div>
-                </TableContainer>
-              </form>
+                        Tổng cộng
+                      </TableCell>
+
+                      <TableCell
+                        align="right"
+                        style={{
+                          fontWeight: 'bold',
+                          fontSize: 'large',
+                          display: 'block',
+                          padding: '16px 0',
+                        }}
+                      >
+                        <p>
+                          {numberWithCommas(
+                            productsOrder.reduce(
+                              (total, product) =>
+                                total + product.price * product.quantity,
+                              0,
+                            ),
+                          )}
+                          &nbsp;&#8363;
+                        </p>
+                      </TableCell>
+
+                      <TableCell />
+                    </TableRow>
+                  </TableBody>
+                </Table>
+
+                <div className={classes.invoiceFooter}>
+                  <Button
+                    className={classes.invoicePaymentBtn}
+                    variant="contained"
+                    onClick={handleSubmit}
+                    disabled={productsOrder.length === 0}
+                  >
+                    Thanh toán
+                  </Button>
+                </div>
+              </TableContainer>
             </Grid>
           </Grid>
         </Box>
       </div>
-      <form method="post" autoComplete="off">
-        <Dialog open={newCustomer} onClose={handleClose}>
-          <DialogTitle>Thêm khách hàng mới</DialogTitle>
-          <DialogContent>
-            {/* <DialogContentText>
-              To subscribe to this website, please enter your email address
-              here. We will send updates occasionally.
-            </DialogContentText> */}
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Tên khách hàng"
-              type="text"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              margin="dense"
-              label="Email"
-              type="email"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              margin="dense"
-              label="Số điện thoại"
-              type="tel"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              margin="dense"
-              label="Địa chỉ"
-              type="text"
-              fullWidth
-              variant="standard"
-            />
-          </DialogContent>
-          <DialogActions className={classes.actionsBtns}>
-            <Button variant="outlined" onClick={handleClose}>
-              Hủy
-            </Button>
-            <Button variant="contained" onClick={handleClose}>
-              Thêm khách hàng
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </form>
-
-      <ToastContainer />
     </div>
   );
 }
