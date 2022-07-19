@@ -13,6 +13,7 @@ export const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: '30px',
+    marginBottom: '20px',
   },
 
   filterSearchWrap: {
