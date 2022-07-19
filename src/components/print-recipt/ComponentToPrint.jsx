@@ -9,9 +9,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 import { useStyles } from '../../pages/pos/pos-page.style';
-import { numberWithCommas } from '../../common/utils';
+import { formatDateTime, numberWithCommas } from '../../common/utils';
 export const ComponentToPrint = React.forwardRef((props, ref) => {
-  const { cart, totalAmount } = props;
+  const { order } = props;
   const classes = useStyles();
 
   return (
@@ -29,17 +29,16 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
 
         <div className={classes.customerInfo}>
           <p>
-            Ngày bán <span>14/07/2022 22:24:53</span>
+            Ngày bán:&nbsp;<span>{formatDateTime(order?.created_at)}</span>
           </p>
           <p>
-            Khách hàng <span>Phạm Quốc Vương</span>
-          </p>
-
-          <p>
-            Số điện thoại <span>0369830702</span>
+            Khách hàng:&nbsp;<span>{order?.fullName}</span>
           </p>
           <p>
-            Địa chỉ: <span>200/12/6 Lê Văn Lương, Quận 7</span>
+            Số điện thoại:&nbsp;<span>{order?.phone}</span>
+          </p>
+          <p>
+            Địa chỉ:&nbsp;<span>{order?.address || 'Chưa có thông tin.'}</span>
           </p>
         </div>
       </div>
@@ -48,7 +47,7 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
           <TableHead>
             <TableRow>
               <TableCell style={{ fontWeight: 'bold', fontSize: 'large' }}>
-                Mã sản phẩm{' '}
+                Mã sản phẩm
               </TableCell>
               <TableCell
                 align="right"
@@ -71,20 +70,21 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {cart
-              ? cart.map((cartProduct, key) => (
-                  <TableRow key={key}>
-                    <TableCell>{cartProduct.idProduct}</TableCell>
-                    <TableCell align="right">{cartProduct.quantity}</TableCell>
+            {order?.products?.length > 0
+              ? order?.products?.map((product) => (
+                  <TableRow key={product?._id}>
+                    <TableCell>{product?.productId?.productId?.code}</TableCell>
+                    <TableCell align="right">{product?.quantity}</TableCell>
                     <TableCell align="right">
-                      {numberWithCommas(cartProduct.price)} vnđ
+                      {numberWithCommas(product?.price)}&nbsp;&#8363;
                     </TableCell>
                     <TableCell align="right">
-                      {numberWithCommas(cartProduct.totalAmount)} vnđ
+                      {numberWithCommas(product?.quantity * product?.price)}
+                      &nbsp;&#8363;
                     </TableCell>
                   </TableRow>
                 ))
-              : ''}
+              : null}
 
             <TableRow>
               <TableCell />
@@ -92,7 +92,7 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
                 Tạm tính
               </TableCell>
               <TableCell align="right">
-                {numberWithCommas(totalAmount)} vnđ
+                {numberWithCommas(order?.total)}&nbsp;&#8363;
               </TableCell>
             </TableRow>
             <TableRow>
@@ -108,7 +108,7 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
                 align="right"
                 style={{ fontWeight: 'bold', fontSize: 'large' }}
               >
-                {numberWithCommas(totalAmount)} vnđ
+                {numberWithCommas(order?.total)}&nbsp;&#8363;
               </TableCell>
             </TableRow>
           </TableBody>

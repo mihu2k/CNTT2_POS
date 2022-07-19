@@ -25,30 +25,30 @@ export default function authReducer(state = initialState, action) {
         profile: null,
       };
 
-    // case types.LOGOUT:
-    //   localStorage.removeItem('profile');
-    //   return {
-    //     ...state,
-    //     status: null,
-    //     profile: null,
-    //   };
-    // case types.CHECK_TOKEN_REQUEST:
-    //   return {
-    //     ...state,
-    //     status: 'pending',
-    //   };
-    // case types.CHECK_TOKEN_SUCCESS:
-    //   return {
-    //     ...state,
-    //     status: types.CHECK_TOKEN_SUCCESS,
-    //     profile: action.payload?.data?.data,
-    //   };
-    // case types.CHECK_TOKEN_FAILURE:
-    //   return {
-    //     ...state,
-    //     status: 'failure',
-    //     profile: null,
-    //   };
+    case types.LOGOUT:
+      localStorage.removeItem('token');
+      return {
+        ...state,
+        status: null,
+        profile: null,
+      };
+    case types.CHECK_TOKEN_REQUEST:
+      return {
+        ...state,
+        status: types.CHECK_TOKEN_REQUEST,
+      };
+    case types.CHECK_TOKEN_SUCCESS:
+      return {
+        ...state,
+        status: types.CHECK_TOKEN_SUCCESS,
+        profile: action.payload?.data?.data,
+      };
+    case types.CHECK_TOKEN_FAILURE:
+      return {
+        ...state,
+        status: types.CHECK_TOKEN_FAILURE,
+        profile: null,
+      };
 
     default:
       return { ...state };
