@@ -10,4 +10,9 @@ export const ProductService = {
     console.log(response, 'RESPONSE');
     return response;
   },
+
+  async create(data) {
+    const response = await httpRequest.post('/product', data);
+    return response;
+  },
 };

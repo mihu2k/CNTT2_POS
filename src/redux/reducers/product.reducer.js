@@ -35,6 +35,24 @@ export default function productReducer(state = initialState, action) {
         totalRecord: 0,
         status: types.GET_PRODUCTS_FAILURE,
       };
+    case types.CREATE_PRODUCT_REQUEST:
+      return {
+        ...state,
+        status: types.CREATE_PRODUCT_REQUEST,
+      };
+    case types.CREATE_PRODUCT_SUCCESS:
+      const product = action.payload.data?.data;
+      return {
+        ...state,
+        status: types.CREATE_PRODUCT_SUCCESS,
+        product,
+      };
+    case types.CREATE_PRODUCT_FAILURE:
+      return {
+        ...state,
+        status: types.CREATE_PRODUCT_FAILURE,
+        product: null,
+      };
 
     default:
       return { ...state };
