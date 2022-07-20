@@ -1,27 +1,25 @@
-import { useStyles } from './orders.style';
-import * as React from 'react';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import { emphasize, styled } from '@mui/material/styles';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Chip from '@mui/material/Chip';
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Box from '@mui/material/Box';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import { emphasize, styled } from '@mui/material/styles';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import PropTypes from 'prop-types';
+import * as React from 'react';
+import { useStyles } from './orders.style';
 
 // import { numberWithCommas } from '../../common/utils';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 // pages
-import SideBar from '../../components/side-bar';
 import OrdersTable from '../../components/orders-table';
 import OrdersTablePos from '../../components/orders-table-pos';
+import SideBar from '../../components/side-bar';
 
-function Products() {
+export default function Orders() {
   const classes = useStyles();
   const StyledBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
@@ -132,10 +130,6 @@ function Products() {
           </Box>
         </div>
       </div>
-
-      <ToastContainer />
     </SideBar>
   );
 }
-
-export default Products;

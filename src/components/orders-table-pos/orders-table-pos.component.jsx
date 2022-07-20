@@ -1,33 +1,37 @@
-import * as React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
 import { FormControlLabel } from '@material-ui/core';
+import { blue } from '@material-ui/core/colors';
 import SearchIcon from '@mui/icons-material/Search';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { blue } from '@material-ui/core/colors';
-import { useStyles } from './orders-table-pos.style';
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import FormControl from '@mui/material/FormControl';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import InputBase from '@mui/material/InputBase';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Paper from '@mui/material/Paper';
+import Select from '@mui/material/Select';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import InputBase from '@mui/material/InputBase';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import { numberWithCommas } from '../../common/utils';
-import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
+import { DataGrid } from '@mui/x-data-grid';
+import * as React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { formatDateTime, numberWithCommas } from '../../common/utils';
+import { getAllOrdersOfPosRequest } from '../../redux/actions/order.action';
+import { useStyles } from './orders-table-pos.style';
 
-function OrdersTable() {
+function OrdersTableForPos() {
   const classes = useStyles();
-  const [orders, setOrders] = React.useState([]);
+  const dispatch = useDispatch();
+  const [query, setQuery] = React.useState({
+    page: 1,
+    per_page: 5,
+  });
   const [orderDetails, setOrderDetails] = React.useState([]);
   const [orderInfo, setOrderInfo] = React.useState([]);
   const [orderView, setOrderView] = React.useState(false);
@@ -35,22 +39,13 @@ function OrdersTable() {
   const [category, setCategory] = React.useState('');
   const [orderstatus, setOrderStatus] = React.useState(0);
 
+  const { order: orderSelector } = useSelector((state) => state);
+
   const handleChangeCategory = (event) => {
     setCategory(event.target.value);
   };
   const handleChangeOrderStatus = (event) => {
     setOrderStatus(event.target.value);
-  };
-  // orders columns
-  const currencyFormatter = new Intl.NumberFormat('it-IT', {
-    style: 'currency',
-    currency: 'VND',
-  });
-
-  const vndPrice = {
-    type: 'number',
-    width: 130,
-    valueFormatter: ({ value }) => currencyFormatter.format(value),
   };
 
   const ordersColumns = [
@@ -60,43 +55,49 @@ function OrdersTable() {
       width: 70,
     },
     {
-      field: 'idOrder',
+      field: 'code',
       headerName: 'Mã đơn hàng',
-      width: 130,
+      flex: 1,
     },
     {
-      field: 'customerName',
+      field: 'fullName',
       headerName: 'Khách hàng',
       align: 'left',
-      width: 160,
+      flex: 1,
     },
-
     {
-      field: 'timeOrder',
-      headerName: 'Thời gian nhận đơn',
-      width: 180,
+      field: 'phone',
+      headerName: 'Số điện thoại',
       align: 'left',
+      flex: 1,
     },
     {
-      field: 'employeeName',
+      field: 'created_at',
+      headerName: 'Thời gian nhận đơn',
+      flex: 1,
+      align: 'left',
+      valueFormatter: ({ value }) => formatDateTime(value),
+    },
+    {
+      field: 'employee',
       headerName: 'Nhân viên bán hàng',
-      width: 160,
+      flex: 1,
       align: 'center',
+      valueFormatter: ({ value }) => value.full_name,
     },
-
     {
-      field: 'totalAmount',
-      headerName: 'Tổng tiền',
+      field: 'total',
+      headerName: 'Tổng tiền (VNĐ)',
       align: 'right',
       type: 'number',
-      width: 120,
-      ...vndPrice,
+      flex: 1,
+      valueFormatter: ({ value }) => numberWithCommas(value),
     },
     {
       field: 'actions',
       headerName: 'Thao tác',
       sortable: false,
-      width: 80,
+      width: 100,
       disableClickEventBubbling: true,
       align: 'right',
       renderCell: (params) => {
@@ -130,15 +131,15 @@ function OrdersTable() {
       />
     );
   };
-  // fetch data from JSON server
-  React.useEffect(() => {
-    fetchOrders();
-  }, []);
 
-  const fetchOrders = async () => {
-    const result = await axios.get('orders');
-    setOrders(await result.data);
+  const fetchOrders = (query = {}) => {
+    dispatch(getAllOrdersOfPosRequest(query));
   };
+
+  React.useEffect(() => {
+    fetchOrders(query);
+  }, [query]);
+
   return (
     <div className={classes.content}>
       <div className={classes.filterWrapper}>
@@ -200,10 +201,23 @@ function OrdersTable() {
       <div style={{ height: 400, width: '100%' }}>
         {!orderView ? (
           <DataGrid
-            rows={orders}
+            rows={orderSelector.orders?.map((item, index) => ({
+              ...item,
+              id: index + 1 + query.per_page * (query.page - 1),
+            }))}
             columns={ordersColumns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
+            pageSize={query.per_page}
+            rowsPerPageOptions={[5, 10]}
+            onPageChange={(newPage) =>
+              setQuery((prev) => ({ ...prev, page: Number(newPage) + 1 }))
+            }
+            onPageSizeChange={(newPage) =>
+              setQuery((prev) => ({ ...prev, per_page: newPage }))
+            }
+            rowCount={orderSelector.totalRecord}
+            pagination
+            paginationMode="server"
+            page={query?.page - 1}
           />
         ) : (
           <Grid item xs={12} className={classes.invoiceWrapper}>
@@ -323,4 +337,4 @@ function OrdersTable() {
   );
 }
 
-export default OrdersTable;
+export default OrdersTableForPos;

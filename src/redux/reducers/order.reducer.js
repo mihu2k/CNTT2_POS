@@ -28,6 +28,27 @@ export default function orderReducer(state = initialState, action) {
         status: types.CREATE_ORDER_FAILURE,
         order: null,
       };
+    case types.GET_ALL_ORDERS_POS_REQUEST:
+      return {
+        ...state,
+        status: types.GET_ALL_ORDERS_POS_REQUEST,
+      };
+    case types.GET_ALL_ORDERS_POS_SUCCESS: {
+      const orders = action.payload.data?.data;
+      return {
+        ...state,
+        status: types.GET_ALL_ORDERS_POS_SUCCESS,
+        orders,
+        totalPage: action.payload.data?.totalPage ?? 1,
+        totalRecord: action.payload.data?.totalRecord ?? 0,
+      };
+    }
+    case types.GET_ALL_ORDERS_POS_FAILURE:
+      return {
+        ...state,
+        status: types.GET_ALL_ORDERS_POS_FAILURE,
+        orders: [],
+      };
 
     default:
       return { ...state };

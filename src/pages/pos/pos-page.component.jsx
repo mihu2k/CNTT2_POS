@@ -206,7 +206,7 @@ function Pos() {
                           />
                         ))
                       ) : (
-                        <p>
+                        <p style={{ marginTop: '20px' }}>
                           {query.search
                             ? 'Không tìm thấy sản phẩm nào.'
                             : 'Chưa có sản phẩm nào.'}
