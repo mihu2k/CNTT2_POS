@@ -175,28 +175,27 @@ function Pos() {
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
             <Grid item xs={7}>
-              {isLoading ? (
-                'Loading'
-              ) : (
-                <div className={classes.containerRow}>
-                  <InfiniteScroll
-                    dataLength={productReducer.products?.length}
-                    next={() => {
-                      setQuery((prev) => ({
-                        ...query,
-                        per_page: prev.per_page + 10,
-                      }));
-                      fetchProducts({
-                        ...query,
-                        per_page: query.per_page + 10,
-                      });
-                    }}
-                    hasMore={
-                      productReducer.products?.length <
-                      productReducer.totalRecord
-                    }
-                    loader={<h4>Loading...</h4>}
-                  >
+              <InfiniteScroll
+                dataLength={productReducer.products?.length}
+                next={() => {
+                  setQuery((prev) => ({
+                    ...query,
+                    per_page: prev.per_page + 10,
+                  }));
+                  fetchProducts({
+                    ...query,
+                    per_page: query.per_page + 10,
+                  });
+                }}
+                hasMore={
+                  productReducer.products?.length < productReducer.totalRecord
+                }
+                loader={<h4>Loading...</h4>}
+              >
+                {isLoading ? (
+                  'Loading'
+                ) : (
+                  <div className={classes.containerRow}>
                     <Grid container spacing={2}>
                       {productReducer.products?.length > 0 ? (
                         productReducer.products?.map((product) => (
@@ -207,16 +206,16 @@ function Pos() {
                           />
                         ))
                       ) : (
-                        <p>
+                        <p style={{ marginTop: '20px' }}>
                           {query.search
                             ? 'Không tìm thấy sản phẩm nào.'
                             : 'Chưa có sản phẩm nào.'}
                         </p>
                       )}
                     </Grid>
-                  </InfiniteScroll>
-                </div>
-              )}
+                  </div>
+                )}
+              </InfiniteScroll>
             </Grid>
 
             <Grid item xs={5} className={classes.invoiceWrapper}>

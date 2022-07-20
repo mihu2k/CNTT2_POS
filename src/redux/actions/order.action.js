@@ -17,3 +17,14 @@ export const createOrderRequest =
       dispatch({ type: types.CREATE_ORDER_FAILURE, payload: error });
     }
   };
+
+export const getAllOrdersOfPosRequest = (query) => async (dispatch) => {
+  dispatch({ type: types.GET_ALL_ORDERS_POS_REQUEST });
+
+  try {
+    const response = await OrderService.getAllForPos(query);
+    dispatch({ type: types.GET_ALL_ORDERS_POS_SUCCESS, payload: response });
+  } catch (error) {
+    dispatch({ type: types.GET_ALL_ORDERS_POS_FAILURE, payload: error });
+  }
+};

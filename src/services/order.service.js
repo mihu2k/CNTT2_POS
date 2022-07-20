@@ -6,4 +6,11 @@ export const OrderService = {
     const response = await httpRequest.post('/order/pos', data);
     return response;
   },
+  async getAllForPos(query) {
+    const response = await httpRequest.get('/order/pos', {
+      params: query,
+      paramsSerializer: (params) => qs.stringify(params),
+    });
+    return response;
+  },
 };
