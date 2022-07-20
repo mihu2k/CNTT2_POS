@@ -14,14 +14,21 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-// import { numberWithCommas } from '../../common/utils';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { formatDateTime, numberWithCommas } from '../../common/utils';
+import { getProductsRequest } from '../../redux/actions/product.action';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
 
 function ProductsTable() {
   const classes = useStyles();
-  const [products, setProducts] = React.useState([]);
+  const dispatch = useDispatch();
+  const [query, setQuery] = React.useState({
+    page: 1,
+    per_page: 5,
+  });
+
+  const { product: productSelector } = useSelector((state) => state);
+
   // const [isLoading, setIsLoading] = React.useState(false);
   const [category, setCategory] = React.useState({
     brand: '',
@@ -38,42 +45,42 @@ function ProductsTable() {
     console.log(category);
   };
 
-  const currencyFormatter = new Intl.NumberFormat('it-IT', {
-    style: 'currency',
-    currency: 'VND',
-  });
-
-  const vndPrice = {
-    type: 'number',
-    width: 130,
-    valueFormatter: ({ value }) => currencyFormatter.format(value),
-  };
   const columns = [
     {
-      field: 'id',
-      headerName: 'ID',
-      width: 70,
+      field: 'code',
+      headerName: 'Mã sản phẩm',
+      width: 200,
     },
-    { field: 'idProduct', headerName: 'Mã sản phẩm', width: 130 },
-    { field: 'name', headerName: 'Tên sản phẩm', width: 300 },
-
-    { field: 'brand', headerName: 'Thương hiệu', width: 130 },
+    { field: 'name', headerName: 'Tên sản phẩm', flex: 1 },
+    { field: 'brand', headerName: 'Thương hiệu', width: 140 },
+    {
+      field: 'categoryId',
+      headerName: 'Category',
+      width: 140,
+      valueFormatter: ({ value }) => value.name,
+    },
+    {
+      field: 'created_at',
+      headerName: 'Thời gian nhận đơn',
+      width: 160,
+      align: 'left',
+      valueFormatter: ({ value }) => formatDateTime(value),
+    },
     {
       field: 'price',
       headerName: 'Giá',
+      align: 'right',
       type: 'number',
       width: 120,
-      ...vndPrice,
+      valueFormatter: ({ value }) => numberWithCommas(value),
     },
-    { field: 'status', headerName: 'Trạng thái', width: 130 },
-    { field: 'category', headerName: 'Category', width: 130 },
     {
-      field: 'color',
+      field: 'colors',
       headerName: 'Số lượng màu',
       width: 120,
       align: 'center',
+      valueFormatter: ({ value }) => value.length,
     },
-
     {
       field: 'actions',
       headerName: 'Thao tác',
@@ -128,17 +135,13 @@ function ProductsTable() {
     );
   };
 
-  // fetch data from JSON server
-  React.useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
-    // setIsLoading(true);
-    const result = await axios.get('products');
-    setProducts(await result.data);
-    // setIsLoading(false);
+  const fetchProducts = (query = {}) => {
+    dispatch(getProductsRequest(query));
   };
+
+  React.useEffect(() => {
+    fetchProducts(query);
+  }, [query]);
 
   return (
     <div className={classes.content}>
@@ -223,10 +226,23 @@ function ProductsTable() {
 
       <div style={{ height: 400, width: '100%' }}>
         <DataGrid
-          rows={products}
+          rows={productSelector.products?.map((item, index) => ({
+            ...item,
+            id: index + 1 + query.per_page * (query.page - 1),
+          }))}
           columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          pageSize={query.per_page}
+          rowsPerPageOptions={[5, 10]}
+          onPageChange={(newPage) =>
+            setQuery((prev) => ({ ...prev, page: Number(newPage) + 1 }))
+          }
+          onPageSizeChange={(newPage) =>
+            setQuery((prev) => ({ ...prev, per_page: newPage }))
+          }
+          rowCount={productSelector.totalRecord}
+          pagination
+          paginationMode="server"
+          page={query?.page - 1}
         />
       </div>
     </div>

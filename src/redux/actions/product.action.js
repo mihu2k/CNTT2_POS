@@ -13,3 +13,14 @@ export const getProductsRequest = (query) => async (dispatch) => {
     console.log(error, 'ERROR REQ');
   }
 };
+
+export const createProductRequest = (data) => async (dispatch) => {
+  dispatch({ type: types.CREATE_PRODUCT_REQUEST });
+
+  try {
+    const response = await ProductService.create(data);
+    dispatch({ type: types.CREATE_PRODUCT_SUCCESS, payload: response });
+  } catch (error) {
+    dispatch({ type: types.CREATE_PRODUCT_FAILURE, payload: error });
+  }
+};
