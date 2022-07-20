@@ -4,7 +4,7 @@ import { FormControlLabel } from '@material-ui/core';
 import SearchIcon from '@mui/icons-material/Search';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { blue } from '@material-ui/core/colors';
-import { useStyles } from './orders-table.style';
+import { useStyles } from './orders-table-pos.style';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
@@ -78,19 +78,19 @@ function OrdersTable() {
       align: 'left',
     },
     {
+      field: 'employeeName',
+      headerName: 'Nhân viên bán hàng',
+      width: 160,
+      align: 'center',
+    },
+
+    {
       field: 'totalAmount',
       headerName: 'Tổng tiền',
       align: 'right',
       type: 'number',
       width: 120,
       ...vndPrice,
-    },
-    { field: 'status', headerName: 'Trạng thái', width: 130, align: 'center' },
-    {
-      field: 'paymentMethod',
-      headerName: 'Thanh toán',
-      width: 130,
-      align: 'center',
     },
     {
       field: 'actions',

@@ -230,8 +230,8 @@ function Pos() {
                 <Table aria-label="spanning table">
                   <TableHead>
                     <TableRow>
-                      <TableCell colSpan={2}>
-                        <FormControl sx={{ m: 1, minWidth: '100%' }}>
+                      <TableCell colSpan={6}>
+                        <FormControl sx={{ minWidth: '100%' }}>
                           <InputLabel id="demo-simple-select-autowidth-label">
                             Nhân viên
                           </InputLabel>
@@ -263,14 +263,14 @@ function Pos() {
                     </TableRow>
 
                     <TableRow>
-                      <TableCell colSpan={3}>
+                      <TableCell colSpan={2}>
                         <TextField
                           autoFocus
                           margin="dense"
                           label="Tên khách hàng"
                           type="text"
                           fullWidth
-                          variant="standard"
+                          variant="outlined"
                           name="fullName"
                           value={infoCustomer.fullName}
                           onChange={handleChange}
@@ -283,7 +283,7 @@ function Pos() {
                           type="email"
                           name="email"
                           fullWidth
-                          variant="standard"
+                          variant="outlined"
                           value={infoCustomer.email}
                           onChange={handleChange}
                         />
@@ -294,24 +294,24 @@ function Pos() {
                       <TableCell colSpan={3}>
                         <TextField
                           margin="dense"
-                          label="Số điện thoại"
-                          type="tel"
-                          name="phone"
+                          label="Địa chỉ"
+                          type="text"
+                          name="address"
                           fullWidth
-                          variant="standard"
-                          value={infoCustomer.phone}
+                          variant="outlined"
+                          value={infoCustomer.address}
                           onChange={handleChange}
                         />
                       </TableCell>
                       <TableCell colSpan={3}>
                         <TextField
                           margin="dense"
-                          label="Địa chỉ"
-                          type="text"
-                          name="address"
+                          label="Số điện thoại"
+                          type="tel"
+                          name="phone"
                           fullWidth
-                          variant="standard"
-                          value={infoCustomer.address}
+                          variant="outlined"
+                          value={infoCustomer.phone}
                           onChange={handleChange}
                         />
                       </TableCell>
@@ -325,7 +325,7 @@ function Pos() {
                       <TableCell align="center">Xóa</TableCell>
                     </TableRow>
                   </TableHead>
-                  <TableBody style={{ overflowY: 'scroll' }}>
+                  <TableBody>
                     {productsOrder.length > 0
                       ? productsOrder?.map((product) => (
                           <TableRow key={product._id + product.colorValue}>
