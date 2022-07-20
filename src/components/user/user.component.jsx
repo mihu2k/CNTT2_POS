@@ -74,8 +74,8 @@ function User() {
         <Link to="#">
           <MenuItem onClick={handleClose}>Thiết lập tài khoản</MenuItem>
         </Link>
-        <Link to="/">
-          <MenuItem onClick={handleClose}>Quản lý</MenuItem>
+        <Link to={routes.dashboard}>
+          <MenuItem>Quản lý</MenuItem>
         </Link>
 
         <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
