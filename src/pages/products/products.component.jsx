@@ -42,10 +42,7 @@ function Products() {
     event.preventDefault();
     console.info('You clicked a breadcrumb.');
   }
-  const callbackFunction = (childData) => {
-    setAddProduct(childData);
-    console.log(childData);
-  };
+
   const [addProduct, setAddProduct] = React.useState(false);
   return (
     <SideBar
@@ -101,7 +98,7 @@ function Products() {
           {!addProduct ? (
             <ProductsTable />
           ) : (
-            <CreateProductForm parentCallback={callbackFunction} />
+            <CreateProductForm onClick={() => setAddProduct(false)} />
           )}
         </div>
       </div>

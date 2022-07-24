@@ -10,6 +10,7 @@ const initialState = {
 
 export default function productReducer(state = initialState, action) {
   switch (action.type) {
+    //get products
     case types.GET_PRODUCTS_REQUEST:
       return {
         ...state,
@@ -35,23 +36,83 @@ export default function productReducer(state = initialState, action) {
         totalRecord: 0,
         status: types.GET_PRODUCTS_FAILURE,
       };
+    // get single product
+    case types.GET_PRODUCT_REQUEST:
+      return {
+        ...state,
+        status: types.GET_PRODUCT_REQUEST,
+      };
+    case types.GET_PRODUCT_SUCCESS: {
+      return {
+        ...state,
+        status: types.GET_PRODUCT_SUCCESS,
+        product: action.payload?.data,
+      };
+    }
+    case types.GET_PRODUCT_FAILURE:
+      return {
+        ...state,
+        status: types.GET_PRODUCT_FAILURE,
+        product: null,
+      };
+    // create product
     case types.CREATE_PRODUCT_REQUEST:
       return {
         ...state,
         status: types.CREATE_PRODUCT_REQUEST,
       };
-    case types.CREATE_PRODUCT_SUCCESS:
-      const product = action.payload.data?.data;
+    case types.CREATE_PRODUCT_SUCCESS: {
+      const products = action.payload.data?.data ?? [];
       return {
         ...state,
         status: types.CREATE_PRODUCT_SUCCESS,
-        product,
+        products,
       };
+    }
     case types.CREATE_PRODUCT_FAILURE:
       return {
         ...state,
         status: types.CREATE_PRODUCT_FAILURE,
         product: null,
+      };
+    // delete product
+    case types.DELETE_PRODUCT_REQUEST:
+      return {
+        ...state,
+        status: types.DELETE_PRODUCT_REQUEST,
+      };
+    case types.DELETE_PRODUCT_SUCCESS: {
+      const products = action.payload.data?.data ?? [];
+      return {
+        ...state,
+        status: types.DELETE_PRODUCT_SUCCESS,
+        products,
+      };
+    }
+    case types.DELETE_PRODUCT_FAILURE:
+      return {
+        ...state,
+        status: types.DELETE_PRODUCT_FAILURE,
+      };
+
+    // update product
+    case types.UPDATE_PRODUCT_REQUEST:
+      return {
+        ...state,
+        status: types.UPDATE_PRODUCT_REQUEST,
+      };
+    case types.UPDATE_PRODUCT_SUCCESS: {
+      const products = action.payload.data?.data ?? [];
+      return {
+        ...state,
+        status: types.UPDATE_PRODUCT_SUCCESS,
+        products,
+      };
+    }
+    case types.UPDATE_PRODUCT_FAILURE:
+      return {
+        ...state,
+        status: types.UPDATE_PRODUCT_FAILURE,
       };
 
     default:
