@@ -104,7 +104,7 @@ export default function Products() {
           {!openAddProduct ? (
             <ProductsTable />
           ) : (
-            <CreateProductForm parentCallback={callbackFunction} />
+            <CreateProductForm onClick={() => setOpenAddProduct(false)} />
           )}
         </div>
       </div>

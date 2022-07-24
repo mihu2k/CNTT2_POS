@@ -16,12 +16,18 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatDateTime, numberWithCommas } from '../../common/utils';
-import { getProductsRequest } from '../../redux/actions/product.action';
+import {
+  getProductsRequest,
+  deleteProductRequest,
+} from '../../redux/actions/product.action';
 import 'react-toastify/dist/ReactToastify.css';
+import EditProductForm from '../../components/edit-product-form';
 
 function ProductsTable() {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [editProduct, setEditProduct] = React.useState(false);
+  const [idProduct, setIdProduct] = React.useState('');
   const [query, setQuery] = React.useState({
     page: 1,
     per_page: 5,
@@ -91,21 +97,24 @@ function ProductsTable() {
       renderCell: (params) => {
         return (
           <div style={{ cursor: 'pointer' }}>
-            <ProductEdit index={params.row.id} />
+            <ProductEdit id={params.row._id} />
           </div>
         );
       },
     },
   ];
-
-  const ProductEdit = ({ index }) => {
+  const ProductEdit = ({ id }) => {
     const handleEditClick = () => {
       // some action
-      console.log(index);
+      setEditProduct(true);
+      setIdProduct(id);
     };
     const handleDeleteClick = () => {
-      // some action
-      console.log(index);
+      console.log(id);
+      if (window.confirm('Bạn muốn xóa sản phẩm này?')) {
+        dispatch(deleteProductRequest(id));
+        dispatch(getProductsRequest(query));
+      }
     };
     return (
       <div>
@@ -141,111 +150,127 @@ function ProductsTable() {
 
   React.useEffect(() => {
     fetchProducts(query);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   return (
-    <div className={classes.content}>
-      <div className={classes.filterWrapper}>
-        <div className={classes.filterSearchWrap}>
-          <Paper component="form" className={classes.filterSearch}>
-            <InputBase
-              sx={{ ml: 1, flex: 1 }}
-              fullWidth
-              placeholder="Tìm sản phẩm!"
-              inputProps={{ 'aria-label': 'Tìm sản phẩm!' }}
-            />
-
-            <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-            <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
-              <SearchIcon />
-            </IconButton>
-          </Paper>
-        </div>
-        <div className={classes.filterSelectWrap}>
-          <FormControl sx={{ m: 1 }} className={classes.filterSelect}>
-            <InputLabel id="demo-simple-select-helper-label-brand">
-              Chọn nhãn hiệu
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-helper-label-brand"
-              id="demo-simple-select-helper-brand"
-              value={category.brand}
-              label="Chọn nhãn hiệu "
-              name="brand"
-              onChange={handleChange}
-            >
-              <MenuItem value="">
-                <em>Tất cả</em>
-              </MenuItem>
-              <MenuItem value={10}>SAMSUNG</MenuItem>
-              <MenuItem value={20}>JBL</MenuItem>
-              <MenuItem value={30}>Sony</MenuItem>
-            </Select>
-          </FormControl>
-
-          <FormControl sx={{ m: 1 }} className={classes.filterSelect}>
-            <InputLabel id="demo-simple-select-helper-label-stt">
-              Trạng thái
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-helper-label-stt"
-              id="demo-simple-select-helper-stt"
-              value={category.status}
-              label="Trạng thái"
-              name="status"
-              onChange={handleChange}
-            >
-              <MenuItem value="">
-                <em>Tất cả</em>
-              </MenuItem>
-              <MenuItem value={10}>Còn hàng</MenuItem>
-              <MenuItem value={20}>Hết hàng</MenuItem>
-            </Select>
-          </FormControl>
-
-          <FormControl sx={{ m: 1 }} className={classes.filterSelect}>
-            <InputLabel id="demo-simple-select-helper-label-filter">
-              Sắp xếp
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-helper-label-filter"
-              id="demo-simple-select-helper-filter"
-              value={category.filter}
-              label="Sắp xếp"
-              name="filter"
-              onChange={handleChange}
-            >
-              <MenuItem value={10}>Giá: Cao đến thấp</MenuItem>
-              <MenuItem value={20}>Giá: Thấp đến cao</MenuItem>
-              <MenuItem value={30}>Tên: A đến Z</MenuItem>
-              <MenuItem value={40}>Tên: Z đến A</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
-      </div>
-
-      <div style={{ height: 400, width: '100%' }}>
-        <DataGrid
-          rows={productSelector.products?.map((item, index) => ({
-            ...item,
-            id: index + 1 + query.per_page * (query.page - 1),
-          }))}
-          columns={columns}
-          pageSize={query.per_page}
-          rowsPerPageOptions={[5, 10]}
-          onPageChange={(newPage) =>
-            setQuery((prev) => ({ ...prev, page: Number(newPage) + 1 }))
-          }
-          onPageSizeChange={(newPage) =>
-            setQuery((prev) => ({ ...prev, per_page: newPage }))
-          }
-          rowCount={productSelector.totalRecord}
-          pagination
-          paginationMode="server"
-          page={query?.page - 1}
+    <>
+      {editProduct ? (
+        <EditProductForm
+          id={idProduct}
+          onClick={() => {
+            setEditProduct(false);
+          }}
         />
-      </div>
-    </div>
+      ) : (
+        <div className={classes.content}>
+          <div className={classes.filterWrapper}>
+            <div className={classes.filterSearchWrap}>
+              <Paper component="form" className={classes.filterSearch}>
+                <InputBase
+                  sx={{ ml: 1, flex: 1 }}
+                  fullWidth
+                  placeholder="Tìm sản phẩm!"
+                  inputProps={{ 'aria-label': 'Tìm sản phẩm!' }}
+                />
+
+                <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+                <IconButton
+                  type="submit"
+                  sx={{ p: '10px' }}
+                  aria-label="search"
+                >
+                  <SearchIcon />
+                </IconButton>
+              </Paper>
+            </div>
+            <div className={classes.filterSelectWrap}>
+              <FormControl sx={{ m: 1 }} className={classes.filterSelect}>
+                <InputLabel id="demo-simple-select-helper-label-brand">
+                  Chọn nhãn hiệu
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label-brand"
+                  id="demo-simple-select-helper-brand"
+                  value={category.brand}
+                  label="Chọn nhãn hiệu "
+                  name="brand"
+                  onChange={handleChange}
+                >
+                  <MenuItem value="">
+                    <em>Tất cả</em>
+                  </MenuItem>
+                  <MenuItem value={10}>SAMSUNG</MenuItem>
+                  <MenuItem value={20}>JBL</MenuItem>
+                  <MenuItem value={30}>Sony</MenuItem>
+                </Select>
+              </FormControl>
+
+              <FormControl sx={{ m: 1 }} className={classes.filterSelect}>
+                <InputLabel id="demo-simple-select-helper-label-stt">
+                  Trạng thái
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label-stt"
+                  id="demo-simple-select-helper-stt"
+                  value={category.status}
+                  label="Trạng thái"
+                  name="status"
+                  onChange={handleChange}
+                >
+                  <MenuItem value="">
+                    <em>Tất cả</em>
+                  </MenuItem>
+                  <MenuItem value={10}>Còn hàng</MenuItem>
+                  <MenuItem value={20}>Hết hàng</MenuItem>
+                </Select>
+              </FormControl>
+
+              <FormControl sx={{ m: 1 }} className={classes.filterSelect}>
+                <InputLabel id="demo-simple-select-helper-label-filter">
+                  Sắp xếp
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label-filter"
+                  id="demo-simple-select-helper-filter"
+                  value={category.filter}
+                  label="Sắp xếp"
+                  name="filter"
+                  onChange={handleChange}
+                >
+                  <MenuItem value={10}>Giá: Cao đến thấp</MenuItem>
+                  <MenuItem value={20}>Giá: Thấp đến cao</MenuItem>
+                  <MenuItem value={30}>Tên: A đến Z</MenuItem>
+                  <MenuItem value={40}>Tên: Z đến A</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+          </div>
+
+          <div style={{ height: 400, width: '100%' }}>
+            <DataGrid
+              rows={productSelector.products?.map((item, index) => ({
+                ...item,
+                id: index + 1 + query.per_page * (query.page - 1),
+              }))}
+              columns={columns}
+              pageSize={query.per_page}
+              rowsPerPageOptions={[5, 10]}
+              onPageChange={(newPage) =>
+                setQuery((prev) => ({ ...prev, page: Number(newPage) + 1 }))
+              }
+              onPageSizeChange={(newPage) =>
+                setQuery((prev) => ({ ...prev, per_page: newPage }))
+              }
+              rowCount={productSelector.totalRecord}
+              pagination
+              paginationMode="server"
+              page={query?.page - 1}
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

@@ -157,7 +157,7 @@ function OrdersTable() {
                 <MenuItem value={10}>Tất cả đơn hàng</MenuItem>
                 <MenuItem value={20}>Chưa thanh toán</MenuItem>
                 <MenuItem value={30}>Đã thanh toán</MenuItem>
-                <MenuItem value={30}>Đã xác nhận</MenuItem>
+                <MenuItem value={40}>Đã xác nhận</MenuItem>
               </Select>
             </FormControl>
           ) : (

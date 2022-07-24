@@ -122,7 +122,7 @@ function OrdersTableForPos() {
 
   React.useEffect(() => {
     fetchOrders(query);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   return (
@@ -168,7 +168,7 @@ function OrdersTableForPos() {
                 <MenuItem value={10}>Tất cả đơn hàng</MenuItem>
                 <MenuItem value={20}>Chưa thanh toán</MenuItem>
                 <MenuItem value={30}>Đã thanh toán</MenuItem>
-                <MenuItem value={30}>Đã xác nhận</MenuItem>
+                <MenuItem value={40}>Đã xác nhận</MenuItem>
               </Select>
             </FormControl>
           ) : (
