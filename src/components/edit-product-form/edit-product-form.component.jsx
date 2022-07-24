@@ -13,14 +13,17 @@ import SendIcon from '@mui/icons-material/Send';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
-import { useStyles } from './add-product-form.style';
-import { useDispatch } from 'react-redux';
-import { createProductRequest } from '../../redux/actions/product.action';
+import { useStyles } from './edit-product-form.style';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getProductRequest,
+  updateProductRequest,
+} from '../../redux/actions/product.action';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { SketchPicker } from 'react-color';
 
-function CreateProductForm({ onClick }) {
+function UpdateProductForm({ props, onClick, id }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const Input = styled('input')({
@@ -32,7 +35,7 @@ function CreateProductForm({ onClick }) {
     brand: '',
     description: '',
     price: '',
-    category: '',
+    category: 0,
     specifications: '',
     accessories: '',
     colors: [],
@@ -50,6 +53,7 @@ function CreateProductForm({ onClick }) {
   } = state;
 
   const [error, setError] = React.useState('');
+
   const handleInputChange = (e) => {
     setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -71,6 +75,7 @@ function CreateProductForm({ onClick }) {
     let colorName = inputColorName.value;
     let fileImg = inputFileImg.value;
     let fileImgSubmit = inputFileImg.files[0];
+
     if (colorName !== '' && fileImg !== '' && color !== '') {
       setColorList((array) => [...array, color]);
       setImages((array) => [...array, fileImg]);
@@ -116,10 +121,24 @@ function CreateProductForm({ onClick }) {
     ) {
       setError('Vui lòng nhập tất cả các trường!');
     } else {
-      dispatch(createProductRequest({ ...state, ...colors }));
+      dispatch(updateProductRequest(state, id));
       setError('');
     }
   };
+
+  React.useEffect(() => {
+    dispatch(getProductRequest(id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const { product } = useSelector((state) => state);
+
+  React.useEffect(() => {
+    if (product) {
+      setState({ ...product });
+    }
+  }, [product]);
+
+  console.log(product);
   return (
     <div>
       <form
@@ -133,7 +152,7 @@ function CreateProductForm({ onClick }) {
             <TextField
               fullWidth
               autoComplete="new-password"
-              value={state.name}
+              value={state.name || ''}
               label="Tên sản phẩm"
               type="text"
               name="name"
@@ -145,7 +164,7 @@ function CreateProductForm({ onClick }) {
             <TextField
               fullWidth
               autoComplete="off"
-              value={state.brand}
+              value={state.brand || ''}
               label="Thương hiệu"
               type="text"
               name="brand"
@@ -156,7 +175,7 @@ function CreateProductForm({ onClick }) {
           <Grid item xs={6}>
             <TextareaAutosize
               minRows={5}
-              value={state.specifications}
+              value={state.specifications || ''}
               placeholder="Thông số kỹ thuật"
               name="specifications"
               className={classes.textArea}
@@ -166,7 +185,7 @@ function CreateProductForm({ onClick }) {
           <Grid item xs={6}>
             <TextareaAutosize
               minRows={5}
-              value={state.accessories}
+              value={state.accessories || ''}
               name="accessories"
               placeholder="Phụ kiện đi kèm"
               className={classes.textArea}
@@ -176,7 +195,7 @@ function CreateProductForm({ onClick }) {
           <Grid item xs={12}>
             <TextareaAutosize
               minRows={5}
-              value={state.description}
+              value={state.description || ''}
               name="description"
               placeholder="Mô tả"
               className={classes.textArea}
@@ -189,7 +208,7 @@ function CreateProductForm({ onClick }) {
               type="number"
               fullWidth
               label="Giá"
-              value={state.price}
+              value={state.price || ''}
               name="price"
               variant="outlined"
               onChange={handleInputChange}
@@ -201,20 +220,14 @@ function CreateProductForm({ onClick }) {
               <Select
                 labelId="select-category-label"
                 id="select-category"
-                value={state.category}
+                value={state.category || ''}
                 name="category"
                 label="Loại tai nghe"
                 onChange={handleInputChange}
               >
-                <MenuItem value={'Tai nghe nhét tai'}>
-                  Tai nghe nhét tai
-                </MenuItem>
-                <MenuItem value={'Tai nghe trùm đầu'}>
-                  Tai nghe trùm đầu
-                </MenuItem>
-                <MenuItem value={'Tai nghe True Wireless'}>
-                  Tai nghe True Wireless
-                </MenuItem>
+                <MenuItem value={1}>Tai nghe nhét tai</MenuItem>
+                <MenuItem value={2}>Tai nghe trùm đầu</MenuItem>
+                <MenuItem value={3}>Tai nghe True Wireless</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -303,7 +316,7 @@ function CreateProductForm({ onClick }) {
           </Grid>
           <Grid item xs={12} mt={2} className={classes.actionBtns}>
             <Button type="submit" variant="contained">
-              Tạo sản phẩm
+              Cập nhật sản phẩm
             </Button>
             <Button variant="text" onClick={onClick}>
               Hủy
@@ -316,4 +329,4 @@ function CreateProductForm({ onClick }) {
   );
 }
 
-export default CreateProductForm;
+export default UpdateProductForm;
