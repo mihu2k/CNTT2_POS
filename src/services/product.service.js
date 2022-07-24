@@ -12,7 +12,11 @@ export const ProductService = {
   },
 
   async create(data) {
-    const response = await httpRequest.post('/product', data);
+    const response = await httpRequest.post('/product', data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return response;
   },
 };

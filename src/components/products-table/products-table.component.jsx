@@ -61,14 +61,14 @@ function ProductsTable() {
     },
     {
       field: 'created_at',
-      headerName: 'Thời gian nhận đơn',
+      headerName: 'Thời gian tạo',
       width: 160,
       align: 'left',
       valueFormatter: ({ value }) => formatDateTime(value),
     },
     {
       field: 'price',
-      headerName: 'Giá',
+      headerName: 'Giá (VNĐ)',
       align: 'right',
       type: 'number',
       width: 120,

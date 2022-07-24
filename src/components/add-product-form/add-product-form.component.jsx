@@ -69,7 +69,6 @@ function CreateProductForm(props) {
   const getAllColorInfo = () => {
     let inputColorName = document.getElementById('colorName');
     let inputFileImg = document.getElementById('fileToUpload');
-    console.log([inputFileImg]);
     let colorName = inputColorName.value;
     let fileImg = inputFileImg.value;
     let fileImgSubmit = inputFileImg.files[0];
@@ -124,11 +123,27 @@ function CreateProductForm(props) {
     ) {
       setError('Vui lòng nhập tất cả các trường!');
     } else {
-      dispatch(createProductRequest({ ...state, ...colors }));
+      const formData = new FormData();
+      for (const key in state) {
+        if (Object.hasOwnProperty.call(state, key)) {
+          const element = state[key];
+          formData.append(key, element);
+        }
+      }
+      formData.append('colors', colors);
+      colors.forEach((color) => {
+        formData.append('images', color.image);
+      });
+      console.log(colors, 'COLORS');
+      dispatch(
+        createProductRequest(formData),
+        // createProductRequest({ ...state, ...colors, image: colors[0].image }),
+      );
       setError('');
       closeAddProducts = true;
     }
   };
+
   return (
     <div>
       <form
