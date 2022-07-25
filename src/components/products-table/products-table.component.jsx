@@ -20,7 +20,6 @@ import {
   getProductsRequest,
   deleteProductRequest,
 } from '../../redux/actions/product.action';
-import 'react-toastify/dist/ReactToastify.css';
 import EditProductForm from '../../components/edit-product-form';
 
 function ProductsTable() {
@@ -67,14 +66,14 @@ function ProductsTable() {
     },
     {
       field: 'created_at',
-      headerName: 'Thời gian nhận đơn',
+      headerName: 'Thời gian tạo',
       width: 160,
       align: 'left',
       valueFormatter: ({ value }) => formatDateTime(value),
     },
     {
       field: 'price',
-      headerName: 'Giá',
+      headerName: 'Giá (VNĐ)',
       align: 'right',
       type: 'number',
       width: 120,
@@ -150,7 +149,6 @@ function ProductsTable() {
 
   React.useEffect(() => {
     fetchProducts(query);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   return (

@@ -8,15 +8,12 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Chip from '@mui/material/Chip';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-// import { numberWithCommas } from '../../common/utils';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 // pages
 import SideBar from '../../components/side-bar';
 import ProductsTable from '../../components/products-table';
 import CreateProductForm from '../../components/add-product-form';
 
-function Products() {
+export default function Products() {
   const classes = useStyles();
   const StyledBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
@@ -38,20 +35,21 @@ function Products() {
     };
   });
 
+  const [openAddProduct, setOpenAddProduct] = React.useState(false);
+
   function handleClick(event) {
     event.preventDefault();
     console.info('You clicked a breadcrumb.');
   }
 
-  const [addProduct, setAddProduct] = React.useState(false);
   return (
     <SideBar
       onClick={() => {
-        setAddProduct(false);
+        setOpenAddProduct(false);
       }}
     >
       <div className={classes.wrapper}>
-        {!addProduct ? (
+        {!openAddProduct ? (
           <div className={classes.header}>
             <Breadcrumbs aria-label="breadcrumb">
               <StyledBreadcrumb
@@ -64,7 +62,7 @@ function Products() {
               <Button
                 variant="contained"
                 onClick={() => {
-                  setAddProduct(true);
+                  setOpenAddProduct(true);
                 }}
               >
                 <AddRoundedIcon />
@@ -82,7 +80,7 @@ function Products() {
                   component="a"
                   href="#"
                   label="Sản phẩm"
-                  onClick={() => setAddProduct(false)}
+                  onClick={() => setOpenAddProduct(false)}
                 />
                 <StyledBreadcrumb
                   label="Thêm sản phẩm"
@@ -95,17 +93,13 @@ function Products() {
         )}
 
         <div className={classes.container}>
-          {!addProduct ? (
+          {!openAddProduct ? (
             <ProductsTable />
           ) : (
-            <CreateProductForm onClick={() => setAddProduct(false)} />
+            <CreateProductForm onClick={() => setOpenAddProduct(false)} />
           )}
         </div>
       </div>
-
-      <ToastContainer />
     </SideBar>
   );
 }
-
-export default Products;

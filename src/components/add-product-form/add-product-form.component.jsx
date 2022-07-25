@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
@@ -14,25 +14,33 @@ import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import { useStyles } from './add-product-form.style';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createProductRequest } from '../../redux/actions/product.action';
-
-import 'react-toastify/dist/ReactToastify.css';
+import * as types from '../../redux/types';
 import { SketchPicker } from 'react-color';
+import { getCategoriesRequest } from '../../redux/actions/category.action';
+import { useNavigate } from 'react-router-dom';
+import routes from '../../router/list.route';
+import { showToastMsg } from '../../common/utils';
 
 function CreateProductForm({ onClick }) {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const Input = styled('input')({
     display: 'none',
   });
+
+  const { category: categorySelector, product: productSelector } = useSelector(
+    (state) => state,
+  );
 
   const [state, setState] = React.useState({
     name: '',
     brand: '',
     description: '',
     price: '',
-    category: '',
+    categoryId: '',
     specifications: '',
     accessories: '',
     colors: [],
@@ -43,7 +51,7 @@ function CreateProductForm({ onClick }) {
     brand,
     description,
     price,
-    category,
+    categoryId,
     specifications,
     accessories,
     colors,
@@ -67,7 +75,6 @@ function CreateProductForm({ onClick }) {
   const getAllColorInfo = () => {
     let inputColorName = document.getElementById('colorName');
     let inputFileImg = document.getElementById('fileToUpload');
-    console.log([inputFileImg]);
     let colorName = inputColorName.value;
     let fileImg = inputFileImg.value;
     let fileImgSubmit = inputFileImg.files[0];
@@ -109,17 +116,67 @@ function CreateProductForm({ onClick }) {
       !brand ||
       !description ||
       !price ||
-      !category ||
+      !categoryId ||
       !specifications ||
       !accessories ||
       !colors
     ) {
       setError('Vui lòng nhập tất cả các trường!');
     } else {
-      dispatch(createProductRequest({ ...state, ...colors }));
+      const formData = new FormData();
+      for (const key in state) {
+        if (Object.hasOwnProperty.call(state, key)) {
+          const element = state[key];
+          formData.append(
+            key,
+            key === 'colors' ? JSON.stringify(element) : element,
+          );
+        }
+      }
+      colors.forEach((color) => {
+        formData.append('images', color.image);
+      });
+      dispatch(createProductRequest(formData));
       setError('');
     }
   };
+
+  const clearForm = () => {
+    setState({
+      name: '',
+      brand: '',
+      description: '',
+      price: '',
+      categoryId: '',
+      specifications: '',
+      accessories: '',
+      colors: [],
+    });
+    resetAllColorInfo();
+  };
+
+  const handleAfterSuccess = () => {
+    onClick();
+  };
+
+  const fetchCategory = (query = {}) => {
+    dispatch(getCategoriesRequest(query));
+  };
+
+  React.useEffect(() => {
+    fetchCategory();
+  }, []);
+
+  React.useEffect(() => {
+    if (productSelector.status === types.CREATE_PRODUCT_SUCCESS) {
+      clearForm();
+      showToastMsg('success', 'Tạo thành công.', {
+        onClose: () => handleAfterSuccess(),
+        autoClose: 2000,
+      });
+    }
+  }, [productSelector]);
+
   return (
     <div>
       <form
@@ -201,20 +258,16 @@ function CreateProductForm({ onClick }) {
               <Select
                 labelId="select-category-label"
                 id="select-category"
-                value={state.category}
-                name="category"
+                value={state.categoryId}
+                name="categoryId"
                 label="Loại tai nghe"
                 onChange={handleInputChange}
               >
-                <MenuItem value={'Tai nghe nhét tai'}>
-                  Tai nghe nhét tai
-                </MenuItem>
-                <MenuItem value={'Tai nghe trùm đầu'}>
-                  Tai nghe trùm đầu
-                </MenuItem>
-                <MenuItem value={'Tai nghe True Wireless'}>
-                  Tai nghe True Wireless
-                </MenuItem>
+                {categorySelector.categories?.map((category) => (
+                  <MenuItem value={category._id} key={category._id}>
+                    {category.name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Grid>
