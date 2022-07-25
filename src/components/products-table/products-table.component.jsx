@@ -20,7 +20,6 @@ import {
   getProductsRequest,
   deleteProductRequest,
 } from '../../redux/actions/product.action';
-import 'react-toastify/dist/ReactToastify.css';
 import EditProductForm from '../../components/edit-product-form';
 
 function ProductsTable() {
@@ -150,7 +149,6 @@ function ProductsTable() {
 
   React.useEffect(() => {
     fetchProducts(query);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   return (

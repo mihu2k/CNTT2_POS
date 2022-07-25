@@ -8,9 +8,6 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Chip from '@mui/material/Chip';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-// import { numberWithCommas } from '../../common/utils';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 // pages
 import SideBar from '../../components/side-bar';
 import ProductsTable from '../../components/products-table';
@@ -44,11 +41,6 @@ export default function Products() {
     event.preventDefault();
     console.info('You clicked a breadcrumb.');
   }
-
-  const callbackFunction = (childData) => {
-    setOpenAddProduct(childData);
-    console.log(childData, '_____________');
-  };
 
   return (
     <SideBar
@@ -108,8 +100,6 @@ export default function Products() {
           )}
         </div>
       </div>
-
-      <ToastContainer />
     </SideBar>
   );
 }
