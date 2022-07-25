@@ -14,11 +14,12 @@ import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import { useStyles } from './add-product-form.style';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createProductRequest } from '../../redux/actions/product.action';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { SketchPicker } from 'react-color';
+import { getCategoriesRequest } from '../../redux/actions/category.action';
 
 function CreateProductForm({ onClick }) {
   const classes = useStyles();
@@ -27,12 +28,14 @@ function CreateProductForm({ onClick }) {
     display: 'none',
   });
 
+  const { category: categorySelector } = useSelector((state) => state);
+
   const [state, setState] = React.useState({
     name: '',
     brand: '',
     description: '',
     price: '',
-    category: '',
+    categoryId: '',
     specifications: '',
     accessories: '',
     colors: [],
@@ -43,7 +46,7 @@ function CreateProductForm({ onClick }) {
     brand,
     description,
     price,
-    category,
+    categoryId,
     specifications,
     accessories,
     colors,
@@ -108,7 +111,7 @@ function CreateProductForm({ onClick }) {
       !brand ||
       !description ||
       !price ||
-      !category ||
+      !categoryId ||
       !specifications ||
       !accessories ||
       !colors
@@ -134,6 +137,14 @@ function CreateProductForm({ onClick }) {
       setError('');
     }
   };
+
+  const fetchCategory = (query = {}) => {
+    dispatch(getCategoriesRequest(query));
+  };
+
+  React.useEffect(() => {
+    fetchCategory();
+  }, []);
 
   return (
     <div>
@@ -216,20 +227,16 @@ function CreateProductForm({ onClick }) {
               <Select
                 labelId="select-category-label"
                 id="select-category"
-                value={state.category}
-                name="category"
+                value={state.categoryId}
+                name="categoryId"
                 label="Loại tai nghe"
                 onChange={handleInputChange}
               >
-                <MenuItem value={'Tai nghe nhét tai'}>
-                  Tai nghe nhét tai
-                </MenuItem>
-                <MenuItem value={'Tai nghe trùm đầu'}>
-                  Tai nghe trùm đầu
-                </MenuItem>
-                <MenuItem value={'Tai nghe True Wireless'}>
-                  Tai nghe True Wireless
-                </MenuItem>
+                {categorySelector.categories?.map((category) => (
+                  <MenuItem value={category._id} key={category._id}>
+                    {category.name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Grid>
