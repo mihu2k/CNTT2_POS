@@ -26,6 +26,9 @@ import { SketchPicker } from 'react-color';
 function UpdateProductForm({ props, onClick, id }) {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const closeEditForm = () => {
+    onClick(onClick);
+  };
   const Input = styled('input')({
     display: 'none',
   });
@@ -60,9 +63,6 @@ function UpdateProductForm({ props, onClick, id }) {
 
   const [color, setColor] = React.useState('');
   const [showColorPicker, setShowColorPicker] = React.useState(false);
-  const [colorList, setColorList] = React.useState([]);
-  const [images, setImages] = React.useState([]);
-  const [colorNames, setColorNames] = React.useState([]);
 
   const handleColor = (updateColor) => {
     setColor(updateColor.hex);
@@ -71,18 +71,18 @@ function UpdateProductForm({ props, onClick, id }) {
   const getAllColorInfo = () => {
     let inputColorName = document.getElementById('colorName');
     let inputFileImg = document.getElementById('fileToUpload');
-    console.log([inputFileImg]);
     let colorName = inputColorName.value;
     let fileImg = inputFileImg.value;
     let fileImgSubmit = inputFileImg.files[0];
-
-    if (colorName !== '' && fileImg !== '' && color !== '') {
-      setColorList((array) => [...array, color]);
-      setImages((array) => [...array, fileImg]);
-      setColorNames((array) => [...array, colorName]);
+    // eslint-disable-next-line no-mixed-operators
+    if (colorName !== '' || (fileImg !== '' && color !== '')) {
       setState((prev) => {
         const colors = [...prev.colors];
-        colors.push({ name: colorName, value: color, image: fileImgSubmit });
+        colors.push({
+          name: colorName,
+          value: color,
+          image: fileImgSubmit,
+        });
         return {
           ...prev,
           colors,
@@ -101,9 +101,7 @@ function UpdateProductForm({ props, onClick, id }) {
 
   const resetAllColorInfo = () => {
     let inputColorName = document.getElementById('colorName');
-    setColorList([]);
-    setImages([]);
-    setColorNames([]);
+
     inputColorName.focus();
   };
 
@@ -123,6 +121,7 @@ function UpdateProductForm({ props, onClick, id }) {
     } else {
       dispatch(updateProductRequest(state, id));
       setError('');
+      alert('Cập nhật sản phẩm thành công!');
     }
   };
 
@@ -130,7 +129,7 @@ function UpdateProductForm({ props, onClick, id }) {
     dispatch(getProductRequest(id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const { product } = useSelector((state) => state);
+  const { product } = useSelector((state) => state.product);
 
   React.useEffect(() => {
     if (product) {
@@ -287,8 +286,7 @@ function UpdateProductForm({ props, onClick, id }) {
               <Grid item xs={12} mb={2} mt={2}>
                 <TextField
                   fullWidth
-                  value={colorNames}
-                  label="Tên màu đã thêm"
+                  value={state.colors.map((colorName) => colorName.name)}
                   variant="outlined"
                   disabled
                 />
@@ -296,8 +294,7 @@ function UpdateProductForm({ props, onClick, id }) {
               <Grid item xs={12} mt={2}>
                 <TextField
                   fullWidth
-                  value={colorList}
-                  label="Mã màu đã thêm"
+                  value={state.colors.map((valueColor) => valueColor.value)}
                   id="colorsPicked"
                   variant="outlined"
                   disabled
@@ -306,8 +303,8 @@ function UpdateProductForm({ props, onClick, id }) {
               <Grid item xs={12} mt={2}>
                 <TextField
                   fullWidth
-                  value={images}
-                  label="Hình ảnh tải lên"
+                  value={state.colors.map((image) => image.image)}
+                  id="colorsPicked"
                   variant="outlined"
                   disabled
                 />
@@ -319,7 +316,7 @@ function UpdateProductForm({ props, onClick, id }) {
               Cập nhật sản phẩm
             </Button>
             <Button variant="text" onClick={onClick}>
-              Hủy
+              Quay về
             </Button>
           </Grid>
           {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
