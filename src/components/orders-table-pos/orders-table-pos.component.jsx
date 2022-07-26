@@ -2,37 +2,29 @@ import { FormControlLabel } from '@material-ui/core';
 import { blue } from '@material-ui/core/colors';
 import SearchIcon from '@mui/icons-material/Search';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import Paper from '@mui/material/Paper';
-import Select from '@mui/material/Select';
 import { DataGrid } from '@mui/x-data-grid';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { formatDateTime, numberWithCommas } from '../../common/utils';
 import { getAllOrdersOfPosRequest } from '../../redux/actions/order.action';
 import { useStyles } from './orders-table-pos.style';
-import OrderDetails from '../../components/order-details';
 
 function OrdersTableForPos() {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [query, setQuery] = React.useState({
     page: 1,
     per_page: 5,
   });
+  const [searchQuery, setSearchQuery] = React.useState('');
 
-  const [orderView, setOrderView] = React.useState(false);
-  const [category, setCategory] = React.useState('');
   const { order: orderSelector } = useSelector((state) => state);
-  const handleChangeCategory = (event) => {
-    setCategory(event.target.value);
-  };
 
   const ordersColumns = [
     {
@@ -95,10 +87,10 @@ function OrdersTableForPos() {
       },
     },
   ];
+
   const ViewOrder = ({ data }) => {
     const handleViewOrder = () => {
-      // some action
-      setOrderView(true);
+      navigate(`/orders/pos/${data._id}`);
     };
     return (
       <FormControlLabel
@@ -120,94 +112,64 @@ function OrdersTableForPos() {
     dispatch(getAllOrdersOfPosRequest(query));
   };
 
+  const handleSearchOrder = (e) => {
+    e.preventDefault();
+    fetchOrders({ search: searchQuery, ...query, page: 1 });
+  };
+
   React.useEffect(() => {
-    fetchOrders(query);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchOrders({ ...query, search: searchQuery });
   }, [query]);
 
   return (
     <div className={classes.content}>
       <div className={classes.filterWrapper}>
         <div className={classes.filterSearchWrap}>
-          {!orderView ? (
-            <Paper component="form" className={classes.filterSearch}>
-              <InputBase
-                sx={{ ml: 1, flex: 1 }}
-                fullWidth
-                placeholder="Tìm đơn hàng bằng mã đơn hàng!"
-                inputProps={{ 'aria-label': 'Tìm đơn hàng bằng mã đơn hàng!' }}
-              />
-
-              <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-              <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
-                <SearchIcon />
-              </IconButton>
-            </Paper>
-          ) : undefined}
-        </div>
-
-        <div className={classes.filterSelectWrap}>
-          {!orderView ? (
-            <FormControl
+          <Paper component="form" className={classes.filterSearch}>
+            <InputBase
+              sx={{ ml: 1, flex: 1 }}
               fullWidth
-              sx={{ m: 1 }}
-              className={classes.filterSelect}
-            >
-              <InputLabel id="demo-simple-select-helper-label-category">
-                Xem đơn hàng
-              </InputLabel>
-              <Select
-                style={{ width: '100px' }}
-                labelId="demo-simple-select-helper-label-category"
-                id="demo-simple-select-helper-brand"
-                value={category}
-                label="Xem đơn hàng"
-                name="category"
-                onChange={handleChangeCategory}
-              >
-                <MenuItem value={10}>Tất cả đơn hàng</MenuItem>
-                <MenuItem value={20}>Chưa thanh toán</MenuItem>
-                <MenuItem value={30}>Đã thanh toán</MenuItem>
-                <MenuItem value={40}>Đã xác nhận</MenuItem>
-              </Select>
-            </FormControl>
-          ) : (
-            <Button
-              variant="outlined"
-              onClick={() => {
-                setOrderView(false);
+              placeholder="Tìm đơn hàng bằng mã đơn hàng!"
+              inputProps={{ 'aria-label': 'Tìm đơn hàng bằng mã đơn hàng!' }}
+              value={searchQuery}
+              onChange={(e) => {
+                if (!e.target.value) setQuery((prev) => ({ ...prev, page: 1 }));
+                setSearchQuery(e.target.value);
               }}
+            />
+
+            <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+            <IconButton
+              type="submit"
+              sx={{ p: '10px' }}
+              aria-label="search"
+              onClick={handleSearchOrder}
             >
-              Quay lại
-            </Button>
-          )}
+              <SearchIcon />
+            </IconButton>
+          </Paper>
         </div>
       </div>
       <div style={{ height: 400, width: '100%' }}>
-        {!orderView ? (
-          <DataGrid
-            rows={orderSelector.orders?.map((item, index) => ({
-              ...item,
-              id: index + 1 + query.per_page * (query.page - 1),
-            }))}
-            columns={ordersColumns}
-            pageSize={query.per_page}
-            rowsPerPageOptions={[5, 10]}
-            onPageChange={(newPage) =>
-              setQuery((prev) => ({ ...prev, page: Number(newPage) + 1 }))
-            }
-            onPageSizeChange={(newPage) =>
-              setQuery((prev) => ({ ...prev, per_page: newPage }))
-            }
-            rowCount={orderSelector.totalRecord}
-            pagination
-            paginationMode="server"
-            page={query?.page - 1}
-          />
-        ) : (
-          // detail order
-          <OrderDetails />
-        )}
+        <DataGrid
+          rows={orderSelector.orders?.map((item, index) => ({
+            ...item,
+            id: index + 1 + query.per_page * (query.page - 1),
+          }))}
+          columns={ordersColumns}
+          pageSize={query.per_page}
+          rowsPerPageOptions={[5, 10]}
+          onPageChange={(newPage) =>
+            setQuery((prev) => ({ ...prev, page: Number(newPage) + 1 }))
+          }
+          onPageSizeChange={(newPage) =>
+            setQuery((prev) => ({ ...prev, per_page: newPage }))
+          }
+          rowCount={orderSelector.totalRecord}
+          pagination
+          paginationMode="server"
+          page={query?.page - 1}
+        />
       </div>
     </div>
   );
