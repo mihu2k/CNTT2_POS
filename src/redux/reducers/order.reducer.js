@@ -49,6 +49,25 @@ export default function orderReducer(state = initialState, action) {
         status: types.GET_ALL_ORDERS_POS_FAILURE,
         orders: [],
       };
+    case types.GET_ORDER_POS_BY_ID_REQUEST:
+      return {
+        ...state,
+        status: types.GET_ORDER_POS_BY_ID_REQUEST,
+      };
+    case types.GET_ORDER_POS_BY_ID_SUCCESS: {
+      const order = action.payload.data?.data;
+      return {
+        ...state,
+        status: types.GET_ORDER_POS_BY_ID_SUCCESS,
+        order,
+      };
+    }
+    case types.GET_ORDER_POS_BY_ID_FAILURE:
+      return {
+        ...state,
+        status: types.GET_ORDER_POS_BY_ID_FAILURE,
+        order: null,
+      };
 
     default:
       return { ...state };

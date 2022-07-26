@@ -3,6 +3,7 @@ const routes = {
   dashboard: '/dashboard',
   login: '/login',
   products: '/products',
+  orders: '/orders',
   // -----
   noMatch: '*',
 };
