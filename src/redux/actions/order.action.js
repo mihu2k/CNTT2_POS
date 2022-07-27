@@ -29,6 +29,17 @@ export const getAllOrdersOfPosRequest = (query) => async (dispatch) => {
   }
 };
 
+export const getAllOrdersRequest = (query) => async (dispatch) => {
+  dispatch({ type: types.GET_ALL_ORDERS_REQUEST });
+
+  try {
+    const response = await OrderService.getAll(query);
+    dispatch({ type: types.GET_ALL_ORDERS_SUCCESS, payload: response });
+  } catch (error) {
+    dispatch({ type: types.GET_ALL_ORDERS_FAILURE, payload: error });
+  }
+};
+
 export const getOrderByIdOfPosRequest = (id) => async (dispatch) => {
   dispatch({ type: types.GET_ORDER_POS_BY_ID_REQUEST });
 

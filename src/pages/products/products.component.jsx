@@ -1,17 +1,17 @@
-import { useStyles } from './products.style';
-import * as React from 'react';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import { emphasize, styled } from '@mui/material/styles';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Chip from '@mui/material/Chip';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import { emphasize, styled } from '@mui/material/styles';
+import * as React from 'react';
+import { useStyles } from './products.style';
 
 // pages
-import SideBar from '../../components/side-bar';
-import ProductsTable from '../../components/products-table';
 import CreateProductForm from '../../components/add-product-form';
+import ProductsTable from '../../components/products-table';
+import SideBar from '../../components/side-bar';
 
 export default function Products() {
   const classes = useStyles();
@@ -77,8 +77,7 @@ export default function Products() {
             <div role="presentation" onClick={handleClick}>
               <Breadcrumbs aria-label="breadcrumb">
                 <StyledBreadcrumb
-                  component="a"
-                  href="#"
+                  component="p"
                   label="Sản phẩm"
                   onClick={() => setOpenAddProduct(false)}
                 />

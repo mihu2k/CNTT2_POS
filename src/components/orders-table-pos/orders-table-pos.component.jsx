@@ -61,7 +61,7 @@ function OrdersTableForPos() {
       headerName: 'Nhân viên bán hàng',
       flex: 1,
       align: 'center',
-      valueFormatter: ({ value }) => value.full_name,
+      valueFormatter: ({ value }) => value?.full_name,
     },
     {
       field: 'total',
@@ -78,13 +78,11 @@ function OrdersTableForPos() {
       width: 100,
       disableClickEventBubbling: true,
       align: 'right',
-      renderCell: (params) => {
-        return (
-          <div style={{ cursor: 'pointer' }}>
-            <ViewOrder data={params.row} />
-          </div>
-        );
-      },
+      renderCell: (params) => (
+        <div style={{ cursor: 'pointer' }}>
+          <ViewOrder data={params.row} />
+        </div>
+      ),
     },
   ];
 
@@ -114,6 +112,7 @@ function OrdersTableForPos() {
 
   const handleSearchOrder = (e) => {
     e.preventDefault();
+    setQuery((prev) => ({ ...prev, page: 1 }));
     fetchOrders({ search: searchQuery, ...query, page: 1 });
   };
 
@@ -140,7 +139,6 @@ function OrdersTableForPos() {
 
             <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
             <IconButton
-              type="submit"
               sx={{ p: '10px' }}
               aria-label="search"
               onClick={handleSearchOrder}
