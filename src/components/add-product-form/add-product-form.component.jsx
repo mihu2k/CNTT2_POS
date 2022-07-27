@@ -254,13 +254,13 @@ function CreateProductForm({ onClick }) {
           </Grid>
           <Grid item xs={6}>
             <FormControl fullWidth>
-              <InputLabel id="select-category-label">Loại tai nghe</InputLabel>
+              <InputLabel id="select-category-label">Loại sản phẩm</InputLabel>
               <Select
                 labelId="select-category-label"
                 id="select-category"
                 value={state.categoryId}
                 name="categoryId"
-                label="Loại tai nghe"
+                label="Loại sản phẩm"
                 onChange={handleInputChange}
               >
                 {categorySelector.categories?.map((category) => (

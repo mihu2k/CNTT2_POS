@@ -7,6 +7,14 @@ export const OrderService = {
     return response;
   },
 
+  async getAll(query) {
+    const response = await httpRequest.get('/order/admin', {
+      params: query,
+      paramsSerializer: (params) => qs.stringify(params),
+    });
+    return response;
+  },
+
   async getAllForPos(query) {
     const response = await httpRequest.get('/order/pos', {
       params: query,
