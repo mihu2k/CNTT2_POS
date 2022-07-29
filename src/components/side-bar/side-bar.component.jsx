@@ -19,12 +19,12 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ListItemText from '@mui/material/ListItemText';
 import GroupIcon from '@mui/icons-material/Group';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import AssessmentIcon from '@mui/icons-material/Assessment';
+import BarChartIcon from '@mui/icons-material/BarChart';
 import CategoryIcon from '@mui/icons-material/Category';
-import { Outlet } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 // component
 import User from '../../components/user';
+import routes from '../../router/list.route';
 
 const drawerWidth = 240;
 
@@ -152,7 +152,18 @@ function SideBar({ children, onClick }) {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <Link to={'/pos'}>
+        <Link to={routes.dashboard}>
+          <List>
+            <ListItem button className={classes.sideBarBtn}>
+              <ListItemIcon>
+                <BarChartIcon />
+              </ListItemIcon>
+              <ListItemText primary="Thống kê" />
+            </ListItem>
+          </List>
+        </Link>
+        <Divider />
+        <Link to={routes.pos}>
           <List>
             <ListItem button className={classes.sideBarBtn}>
               <ListItemIcon>
@@ -162,7 +173,7 @@ function SideBar({ children, onClick }) {
             </ListItem>
           </List>
         </Link>
-        <Link to={'/orders'}>
+        <Link to={routes.orders}>
           <List>
             <ListItem button className={classes.sideBarBtn}>
               <ListItemIcon>
@@ -173,7 +184,7 @@ function SideBar({ children, onClick }) {
           </List>
         </Link>
         <Divider />
-        <Link to={'/products'}>
+        <Link to={routes.products}>
           <List>
             <ListItem button className={classes.sideBarBtn} onClick={onClick}>
               <ListItemIcon>
@@ -184,24 +195,13 @@ function SideBar({ children, onClick }) {
           </List>
         </Link>
         <Divider />
-        <Link to={'/employee'}>
+        <Link to={routes.employee}>
           <List>
             <ListItem button className={classes.sideBarBtn} onClick={onClick}>
               <ListItemIcon>
                 <GroupIcon />
               </ListItemIcon>
               <ListItemText primary="Nhân viên" />
-            </ListItem>
-          </List>
-        </Link>
-        <Divider />
-        <Link to={'/'}>
-          <List>
-            <ListItem button className={classes.sideBarBtn}>
-              <ListItemIcon>
-                <AssessmentIcon />
-              </ListItemIcon>
-              <ListItemText primary="Báo Cáo" />
             </ListItem>
           </List>
         </Link>

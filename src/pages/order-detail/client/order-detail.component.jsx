@@ -1,12 +1,12 @@
-import React from 'react';
 import Button from '@mui/material/Button';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import OrderDetailsForPos from '../../../components/order-detail-pos';
+import OrderDetails from '../../../components/order-details/order-details.component';
 import SideBar from '../../../components/side-bar';
+import { getOrderByIdRequest } from '../../../redux/actions/order.action';
 import routes from '../../../router/list.route';
 import { useStyles } from './orders-table-pos.style';
-import { getOrderByIdOfPosRequest } from '../../../redux/actions/order.action';
 
 export function OrderDetail() {
   const classes = useStyles();
@@ -17,7 +17,7 @@ export function OrderDetail() {
   const { order: orderSelector } = useSelector((state) => state);
 
   const fetchOrderById = (id) => {
-    dispatch(getOrderByIdOfPosRequest(id));
+    dispatch(getOrderByIdRequest(id));
   };
 
   React.useEffect(() => {
@@ -37,7 +37,7 @@ export function OrderDetail() {
           </div>
         </div>
         <div style={{ height: 400, width: '100%' }}>
-          <OrderDetailsForPos order={orderSelector.order} />
+          <OrderDetails order={orderSelector.order} />
         </div>
       </div>
     </SideBar>

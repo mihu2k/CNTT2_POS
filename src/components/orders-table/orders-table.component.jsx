@@ -133,7 +133,6 @@ export default function OrdersTable() {
   };
 
   const handleChangeStatusFilter = (e) => {
-    console.log(e.target.value);
     setStatusQuery(e.target.value);
     setQuery((prev) => ({ ...prev, page: 1 }));
     fetchOrders({
@@ -193,7 +192,7 @@ export default function OrdersTable() {
               <MenuItem value={0}>Đang xử lý</MenuItem>
               <MenuItem value={1}>Đã xác nhận</MenuItem>
               <MenuItem value={2}>Đang giao hàng</MenuItem>
-              <MenuItem value={3}>Đã thanh toán</MenuItem>
+              <MenuItem value={3}>Đã giao hàng</MenuItem>
               <MenuItem value={-1}>Không xác định</MenuItem>
             </Select>
           </FormControl>

@@ -31,6 +31,7 @@ function ProductsTable() {
     page: 1,
     per_page: 5,
   });
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   const { product: productSelector } = useSelector((state) => state);
 
@@ -143,12 +144,18 @@ function ProductsTable() {
     );
   };
 
+  const handleSearchProduct = (e) => {
+    e.preventDefault();
+    setQuery((prev) => ({ ...prev, page: 1 }));
+    fetchProducts({ search: searchQuery, ...query, page: 1 });
+  };
+
   const fetchProducts = (query = {}) => {
     dispatch(getProductsRequest(query));
   };
 
   React.useEffect(() => {
-    fetchProducts(query);
+    fetchProducts({ ...query, search: searchQuery });
   }, [query]);
 
   return (
@@ -168,8 +175,14 @@ function ProductsTable() {
                 <InputBase
                   sx={{ ml: 1, flex: 1 }}
                   fullWidth
-                  placeholder="Tìm sản phẩm!"
-                  inputProps={{ 'aria-label': 'Tìm sản phẩm!' }}
+                  placeholder="Tìm sản phẩm theo tên!"
+                  inputProps={{ 'aria-label': 'Tìm sản phẩm theo tên!' }}
+                  value={searchQuery}
+                  onChange={(e) => {
+                    if (!e.target.value)
+                      setQuery((prev) => ({ ...prev, page: 1 }));
+                    setSearchQuery(e.target.value);
+                  }}
                 />
 
                 <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
@@ -177,6 +190,7 @@ function ProductsTable() {
                   type="submit"
                   sx={{ p: '10px' }}
                   aria-label="search"
+                  onClick={handleSearchProduct}
                 >
                   <SearchIcon />
                 </IconButton>
