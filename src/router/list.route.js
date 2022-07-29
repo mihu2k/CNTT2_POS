@@ -4,6 +4,8 @@ const routes = {
   login: '/login',
   products: '/products',
   orders: '/orders',
+  pos: '/pos',
+  employee: '/employee',
   // -----
   noMatch: '*',
 };

@@ -83,7 +83,14 @@ function Pos() {
         0,
       ),
     };
-    dispatch(createOrderRequest(data));
+    dispatch(
+      createOrderRequest(data, () => {
+        showToastMsg('success', 'Thanh toán thành công.', {
+          onClose: () => handleReactToPrint(),
+          autoClose: 2500,
+        });
+      }),
+    );
   };
 
   const removeProductOrder = (product) => {
@@ -139,15 +146,6 @@ function Pos() {
   React.useEffect(() => {
     fetchProducts(query);
   }, []);
-
-  React.useEffect(() => {
-    if (orderSelector.status === types.CREATE_ORDER_SUCCESS) {
-      showToastMsg('success', 'Thanh toán thành công.', {
-        onClose: () => handleReactToPrint(),
-        autoClose: 2500,
-      });
-    }
-  }, [orderSelector]);
 
   return (
     <div>

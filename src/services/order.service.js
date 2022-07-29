@@ -23,8 +23,20 @@ export const OrderService = {
     return response;
   },
 
+  async getOneById(id) {
+    const response = await httpRequest.get(`/order/${id}`);
+    return response;
+  },
+
   async getOneByIdForPos(id) {
     const response = await httpRequest.get(`/order/pos/${id}`);
+    return response;
+  },
+
+  async updateStatus(orderId, status) {
+    const response = await httpRequest.patch(`/order/status/${orderId}`, {
+      status,
+    });
     return response;
   },
 };

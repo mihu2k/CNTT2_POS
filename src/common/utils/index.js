@@ -68,7 +68,7 @@ export function showTextOrderStatus(statusCode) {
       color = '#1976d2';
       break;
     case 3:
-      status = 'Đã thanh toán';
+      status = 'Đã giao hàng';
       color = '#06de06';
       icon = <DoneIcon style={{ color: '#fff' }} />;
       break;

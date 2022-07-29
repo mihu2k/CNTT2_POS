@@ -9,13 +9,11 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import Stack from '@mui/material/Stack';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
+import { formatDateTime } from '../../common/utils';
 
 function EmployeeTable() {
   const classes = useStyles();
@@ -27,8 +25,6 @@ function EmployeeTable() {
     setRole(event.target.value);
   };
 
-  // employee columns
-
   const ordersColumns = [
     {
       field: 'id',
@@ -38,26 +34,28 @@ function EmployeeTable() {
     {
       field: 'userName',
       headerName: 'Tên đăng nhập',
-      width: 160,
+      flex: 1,
     },
     {
       field: 'email',
       headerName: 'Email',
-      width: 260,
-      align: 'left',
+      flex: 1,
     },
     {
       field: 'fullName',
       headerName: 'Tên nhân viên',
-      align: 'left',
-      width: 180,
+      flex: 1,
     },
-
     {
       field: 'role',
       headerName: 'Vai trò',
-      width: 120,
-      align: 'left',
+      flex: 1,
+    },
+    {
+      field: 'created_at',
+      headerName: 'Thời gian tạo',
+      flex: 1,
+      valueFormatter: ({ value }) => formatDateTime(value),
     },
     {
       field: 'actions',
@@ -75,6 +73,7 @@ function EmployeeTable() {
       },
     },
   ];
+
   const EmployeeAction = ({ data }) => {
     const handleEditClick = () => {
       // some action
@@ -115,15 +114,13 @@ function EmployeeTable() {
       </div>
     );
   };
-  // fetch data from JSON server
+
+  const fetchEmployee = () => {};
+
   React.useEffect(() => {
-    fetchOrders();
+    fetchEmployee();
   }, []);
 
-  const fetchOrders = async () => {
-    const result = await axios.get('employee');
-    setEmployee(await result.data);
-  };
   return (
     <div className={classes.content}>
       <div

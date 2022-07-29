@@ -8,7 +8,7 @@ import EmployeePage from '../pages/employee';
 import SignInSide from '../pages/sign-in/sign-in.component';
 import ProtectedRoutes from './protected.route';
 import PublicRoutes from './public.route';
-import { OrderDetailForPos } from '../pages/order-detail';
+import { OrderDetail, OrderDetailForPos } from '../pages/order-detail';
 
 const AppRouter = () => {
   return (
@@ -19,6 +19,7 @@ const AppRouter = () => {
         <Route path="products" element={<ProductsPage />} />
         <Route path="orders" element={<OrdersPage />} />
         <Route path="orders/pos/:id" element={<OrderDetailForPos />} />
+        <Route path="orders/:id" element={<OrderDetail />} />
         <Route path="employee" element={<EmployeePage />} />
       </Route>
 

@@ -4,8 +4,6 @@ import { emphasize, styled } from '@mui/material/styles';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Chip from '@mui/material/Chip';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 // pages
 import SideBar from '../../components/side-bar';
 import EmployeeTable from '../../components/employee-table';
@@ -54,8 +52,6 @@ function Employee() {
           <EmployeeTable />
         </div>
       </div>
-
-      <ToastContainer />
     </SideBar>
   );
 }
