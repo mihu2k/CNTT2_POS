@@ -1,3 +1,4 @@
+import { showToastMsg } from '../../common/utils';
 import { ProductService } from '../../services/product.service';
 import * as types from '../types';
 
@@ -36,16 +37,22 @@ export const deleteProductRequest = (id) => async (dispatch) => {
   }
 };
 
-export const updateProductRequest = (updateData, id) => async (dispatch) => {
-  dispatch({ type: types.DELETE_PRODUCT_REQUEST });
+export const updateProductRequest =
+  (updateData, id, cb) => async (dispatch) => {
+    dispatch({ type: types.UPDATE_PRODUCT_REQUEST });
 
-  try {
-    const response = await ProductService.update(updateData, id);
-    dispatch({ type: types.DELETE_PRODUCT_SUCCESS, payload: response });
-  } catch (error) {
-    dispatch({ type: types.DELETE_PRODUCT_FAILURE, payload: error });
-  }
-};
+    try {
+      const response = await ProductService.update(updateData, id);
+      dispatch({ type: types.UPDATE_PRODUCT_SUCCESS, payload: response });
+      cb();
+    } catch (error) {
+      dispatch({ type: types.UPDATE_PRODUCT_FAILURE, payload: error });
+      showToastMsg('error', 'Cập nhật thất bại.', {
+        toastId: id,
+        autoClose: 2500,
+      });
+    }
+  };
 
 export const getProductRequest = (id) => async (dispatch) => {
   dispatch({ type: types.GET_PRODUCT_REQUEST });

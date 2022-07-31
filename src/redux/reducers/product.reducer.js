@@ -99,11 +99,9 @@ export default function productReducer(state = initialState, action) {
         status: types.UPDATE_PRODUCT_REQUEST,
       };
     case types.UPDATE_PRODUCT_SUCCESS: {
-      const products = action.payload.data?.data ?? [];
       return {
         ...state,
         status: types.UPDATE_PRODUCT_SUCCESS,
-        products,
       };
     }
     case types.UPDATE_PRODUCT_FAILURE:

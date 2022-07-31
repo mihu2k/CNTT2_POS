@@ -103,6 +103,7 @@ function ProductsTable() {
       },
     },
   ];
+
   const ProductEdit = ({ id }) => {
     const handleEditClick = () => {
       // some action
