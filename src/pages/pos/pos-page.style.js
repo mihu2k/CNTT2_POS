@@ -22,7 +22,6 @@ export const useStyles = makeStyles((theme) => ({
     display: 'flex',
     margin: '20px',
     maxHeight: '600px',
-    overflowY: 'scroll',
   },
 
   productWrap: {
@@ -44,9 +43,7 @@ export const useStyles = makeStyles((theme) => ({
     display: '-webkit-box',
     '-webkit-line-clamp': '2',
     '-webkit-box-orient': 'vertical',
-
     'text-overflow': 'ellipsis',
-
     overflow: 'hidden',
     textAlign: 'center',
   },
@@ -56,18 +53,28 @@ export const useStyles = makeStyles((theme) => ({
     objectFit: 'cover',
   },
   invoiceWrapper: {
-    maxHeight: '600px',
+    maxHeight: '100vh',
+    position: 'relative',
   },
   invoice: {
+    maxHeight: '550px',
+    overflow: 'scroll',
+    scrollBehaviorL: 'smooth',
     marginTop: '20px',
-    height: '100%',
-    overflowY: 'scroll',
     '& table.MuiTable-root.css-1pclhgl-MuiTable-root': {
       minWidth: '100%',
     },
   },
 
+  invoiceBody: {
+    maxHeight: '620px',
+  },
+
   invoiceFooter: {
+    position: 'absolute',
+    bottom: '0',
+    left: '16px',
+    right: '0',
     display: 'flex',
     width: '100%',
   },
