@@ -32,7 +32,11 @@ export const ProductService = {
   },
 
   async update(dataUpdate, id) {
-    const response = await httpRequest.put(`/product/${id}`, dataUpdate);
+    const response = await httpRequest.put(`/product/${id}`, dataUpdate, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return response;
   },
 };

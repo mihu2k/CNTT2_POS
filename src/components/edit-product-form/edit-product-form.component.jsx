@@ -7,38 +7,28 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import SendIcon from '@mui/icons-material/Send';
-import RotateLeftIcon from '@mui/icons-material/RotateLeft';
-import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 import { useStyles } from './edit-product-form.style';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getProductRequest,
   updateProductRequest,
 } from '../../redux/actions/product.action';
+import { getCategoriesRequest } from '../../redux/actions/category.action';
+import ColorList from './list-color.component';
+import { showToastMsg } from '../../common/utils';
 
-import 'react-toastify/dist/ReactToastify.css';
-import { SketchPicker } from 'react-color';
-
-function UpdateProductForm({ props, onClick, id }) {
+function UpdateProductForm({ onClick, id }) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const closeEditForm = () => {
-    onClick(onClick);
-  };
-  const Input = styled('input')({
-    display: 'none',
-  });
+
+  const { category: categorySelector } = useSelector((state) => state);
 
   const [state, setState] = React.useState({
     name: '',
     brand: '',
     description: '',
     price: '',
-    category: 0,
+    categoryId: '',
     specifications: '',
     accessories: '',
     colors: [],
@@ -49,7 +39,7 @@ function UpdateProductForm({ props, onClick, id }) {
     brand,
     description,
     price,
-    category,
+    categoryId,
     specifications,
     accessories,
     colors,
@@ -61,49 +51,7 @@ function UpdateProductForm({ props, onClick, id }) {
     setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const [color, setColor] = React.useState('');
-  const [showColorPicker, setShowColorPicker] = React.useState(false);
-
-  const handleColor = (updateColor) => {
-    setColor(updateColor.hex);
-  };
-
-  const getAllColorInfo = () => {
-    let inputColorName = document.getElementById('colorName');
-    let inputFileImg = document.getElementById('fileToUpload');
-    let colorName = inputColorName.value;
-    let fileImg = inputFileImg.value;
-    let fileImgSubmit = inputFileImg.files[0];
-    // eslint-disable-next-line no-mixed-operators
-    if (colorName !== '' || (fileImg !== '' && color !== '')) {
-      setState((prev) => {
-        const colors = [...prev.colors];
-        colors.push({
-          name: colorName,
-          value: color,
-          image: fileImgSubmit,
-        });
-        return {
-          ...prev,
-          colors,
-        };
-      });
-      inputColorName.value = '';
-      setShowColorPicker(false);
-      alert('Thêm màu và hình ảnh sản phẩm thành công!');
-      inputColorName.focus();
-    } else {
-      alert('Vui lòng nhập thông tin màu!');
-      inputColorName.value = '';
-      inputColorName.focus();
-    }
-  };
-
-  const resetAllColorInfo = () => {
-    let inputColorName = document.getElementById('colorName');
-
-    inputColorName.focus();
-  };
+  const [colorList, setColorList] = React.useState([]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -112,24 +60,73 @@ function UpdateProductForm({ props, onClick, id }) {
       !brand ||
       !description ||
       !price ||
-      !category ||
+      !categoryId ||
       !specifications ||
       !accessories ||
       !colors
     ) {
       setError('Vui lòng nhập tất cả các trường!');
     } else {
-      dispatch(updateProductRequest(state, id));
+      const data = {
+        name,
+        brand,
+        description,
+        specifications,
+        accessories,
+        price,
+        categoryId,
+        colors: colorList,
+      };
+      const formData = new FormData();
+      for (const key in data) {
+        if (Object.hasOwnProperty.call(data, key)) {
+          const element = data[key];
+          formData.append(
+            key,
+            key === 'colors'
+              ? JSON.stringify(
+                  element?.map((item) => ({
+                    name: item?.name,
+                    value: item?.value,
+                    image: typeof item?.image === 'string' ? item?.image : '',
+                  })),
+                )
+              : element,
+          );
+        }
+      }
+      data.colors.forEach((color) => {
+        if (typeof color.image !== 'string')
+          formData.append('images', color.image);
+      });
+      dispatch(
+        updateProductRequest(formData, id, () => {
+          showToastMsg('success', 'Cập nhật thành công.', {
+            toastId: id,
+            autoClose: 2500,
+            onClose: () => onClick(),
+          });
+        }),
+      );
+      console.log(formData, '---formData---');
       setError('');
-      alert('Cập nhật sản phẩm thành công!');
     }
   };
 
-  React.useEffect(() => {
-    dispatch(getProductRequest(id));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   const { product } = useSelector((state) => state.product);
+
+  const handleGetColorList = (colors) => {
+    setColorList(colors);
+  };
+
+  const fetchCategory = (query = {}) => {
+    dispatch(getCategoriesRequest(query));
+  };
+
+  React.useEffect(() => {
+    fetchCategory();
+    dispatch(getProductRequest(id));
+  }, []);
 
   React.useEffect(() => {
     if (product) {
@@ -137,7 +134,6 @@ function UpdateProductForm({ props, onClick, id }) {
     }
   }, [product]);
 
-  console.log(product);
   return (
     <div>
       <form
@@ -219,96 +215,27 @@ function UpdateProductForm({ props, onClick, id }) {
               <Select
                 labelId="select-category-label"
                 id="select-category"
-                value={state.category || ''}
-                name="category"
+                value={state.categoryId || ''}
+                name="categoryId"
                 label="Loại sản phẩm"
                 onChange={handleInputChange}
               >
-                <MenuItem value={1}>Tai nghe nhét tai</MenuItem>
-                <MenuItem value={2}>Tai nghe trùm đầu</MenuItem>
-                <MenuItem value={3}>Tai nghe True Wireless</MenuItem>
+                {categorySelector.categories?.length > 0
+                  ? categorySelector.categories?.map((category) => (
+                      <MenuItem key={category?._id} value={category?._id}>
+                        {category?.name}
+                      </MenuItem>
+                    ))
+                  : null}
               </Select>
             </FormControl>
           </Grid>
           <Grid item xs={12}>
             <div>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="off"
-                  fullWidth
-                  label="Nhập tên màu"
-                  variant="outlined"
-                  id="colorName"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Stack direction="row" alignItems="center" spacing={2} mt={2}>
-                  <Button
-                    variant="outlined"
-                    onClick={() => {
-                      setShowColorPicker((showColorPicker) => !showColorPicker);
-                    }}
-                  >
-                    {showColorPicker ? 'Đóng chọn màu' : 'Chọn màu'}
-                  </Button>
-                  <label htmlFor="fileToUpload">
-                    <Input accept="image/*" id="fileToUpload" type="file" />
-                    <IconButton
-                      color="primary"
-                      aria-label="upload picture"
-                      component="span"
-                    >
-                      <PhotoCamera />
-                    </IconButton>
-                  </label>
-                  <Button
-                    variant="outlined"
-                    endIcon={<SendIcon />}
-                    onClick={getAllColorInfo}
-                  >
-                    Thêm màu
-                  </Button>
-                  <Button
-                    variant="text"
-                    endIcon={<RotateLeftIcon />}
-                    onClick={resetAllColorInfo}
-                  >
-                    Xóa tất cả
-                  </Button>
-                </Stack>
-              </Grid>
-              <Grid item xs={12} mt={2}>
-                {showColorPicker && (
-                  <SketchPicker color={color} onChange={handleColor} />
-                )}
-              </Grid>
-
-              <Grid item xs={12} mb={2} mt={2}>
-                <TextField
-                  fullWidth
-                  value={state.colors.map((colorName) => colorName.name)}
-                  variant="outlined"
-                  disabled
-                />
-              </Grid>
-              <Grid item xs={12} mt={2}>
-                <TextField
-                  fullWidth
-                  value={state.colors.map((valueColor) => valueColor.value)}
-                  id="colorsPicked"
-                  variant="outlined"
-                  disabled
-                />
-              </Grid>
-              <Grid item xs={12} mt={2}>
-                <TextField
-                  fullWidth
-                  value={state.colors.map((image) => image.image)}
-                  id="colorsPicked"
-                  variant="outlined"
-                  disabled
-                />
-              </Grid>
+              <ColorList
+                colorList={state?.colors}
+                getColorList={handleGetColorList}
+              />
             </div>
           </Grid>
           <Grid item xs={12} mt={2} className={classes.actionBtns}>
