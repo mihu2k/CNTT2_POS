@@ -36,25 +36,20 @@ const emailRegExp =
 function Pos() {
   const classes = useStyles();
   const dispatch = useDispatch();
-
   const [query, setQuery] = React.useState({ search: '', per_page: 10 });
   const [productsOrder, setProductsOrder] = React.useState([]);
-
   const {
     product: productReducer,
     auth: authSelector,
     order: orderSelector,
   } = useSelector((state) => state);
-
   // start invoice cpn
   const [selectUser, setSelectUser] = React.useState(1);
   const handleChangeUser = (event) => {
     setSelectUser(event.target.value);
   };
   // end invoice cpn
-
   const [isLoading, setIsLoading] = React.useState(false);
-
   const [infoCustomer, setInfoCustomer] = React.useState({
     email: '',
     address: '',
@@ -141,6 +136,7 @@ function Pos() {
     //   return;
     // }
     dispatch(getProductsRequest(query));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedValue]);
 
   React.useEffect(() => {
@@ -218,7 +214,11 @@ function Pos() {
                 />
               </div>
 
-              <TableContainer component={Paper} className={classes.invoice}>
+              <TableContainer
+                component={Paper}
+                className={classes.invoice}
+                id="invoice"
+              >
                 <Table aria-label="spanning table">
                   <TableHead>
                     <TableRow>
@@ -395,23 +395,22 @@ function Pos() {
                           &nbsp;&#8363;
                         </p>
                       </TableCell>
-
                       <TableCell />
                     </TableRow>
                   </TableBody>
                 </Table>
-
-                <div className={classes.invoiceFooter}>
-                  <Button
-                    className={classes.invoicePaymentBtn}
-                    variant="contained"
-                    onClick={handleSubmit}
-                    disabled={productsOrder.length === 0}
-                  >
-                    Thanh toán
-                  </Button>
-                </div>
               </TableContainer>
+
+              <div className={classes.invoiceFooter}>
+                <Button
+                  className={classes.invoicePaymentBtn}
+                  variant="contained"
+                  onClick={handleSubmit}
+                  disabled={productsOrder.length === 0}
+                >
+                  Thanh toán
+                </Button>
+              </div>
             </Grid>
           </Grid>
         </Box>

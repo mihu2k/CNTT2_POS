@@ -66,7 +66,7 @@ export default function OrdersTable() {
       flex: 1,
       valueFormatter: ({ value }) =>
         value === 0
-          ? 'Thẻ quốc tế'
+          ? 'Chuyển khoản'
           : value === 1
           ? 'ATM/QR/Ví điện tử'
           : 'Tiền mặt',
@@ -145,6 +145,7 @@ export default function OrdersTable() {
 
   React.useEffect(() => {
     fetchOrders({ ...query, search: searchQuery, status: statusQuery });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   return (
@@ -230,7 +231,12 @@ function ViewStatus({ order }) {
     <Chip
       icon={icon}
       label={status}
-      style={{ backgroundColor: color, color: '#fff', width: '142px' }}
+      style={{
+        backgroundColor: color,
+        color: '#fff',
+        fontSize: '0.8rem',
+        minWidth: '142px',
+      }}
     />
   );
 }

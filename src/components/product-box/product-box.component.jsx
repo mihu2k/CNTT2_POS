@@ -1,19 +1,7 @@
 import * as React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { FormControlLabel } from '@material-ui/core';
-import SearchIcon from '@mui/icons-material/Search';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { blue, red } from '@material-ui/core/colors';
+
 import { useStyles } from './product-box.style';
-import Paper from '@mui/material/Paper';
-import InputBase from '@mui/material/InputBase';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import { useRef } from 'react';
 // import { numberWithCommas } from '../../common/utils';
 import cx from 'classnames';
 

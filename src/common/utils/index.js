@@ -51,7 +51,9 @@ export function formatDateTime(timestamp) {
  */
 export function showTextOrderStatus(statusCode) {
   let status = '',
-    icon = <HourglassBottomIcon style={{ color: '#fff' }} />,
+    icon = (
+      <HourglassBottomIcon style={{ color: '#fff' , fontSize: '1rem' }} />
+    ),
     color = '#f6dd00';
   switch (Number(statusCode)) {
     case 0:
@@ -59,23 +61,23 @@ export function showTextOrderStatus(statusCode) {
       break;
     case 1:
       status = 'Đã xác nhận';
-      icon = <ThumbUpAltIcon style={{ color: '#fff' }} />;
+      icon = <ThumbUpAltIcon style={{ color: '#fff', fontSize: '1rem' }} />;
       color = '#1976d2';
       break;
     case 2:
       status = 'Đang giao hàng';
-      icon = <LocalShippingIcon style={{ color: '#fff' }} />;
+      icon = <LocalShippingIcon style={{ color: '#fff', fontSize: '1rem' }} />;
       color = '#1976d2';
       break;
     case 3:
       status = 'Đã giao hàng';
       color = '#06de06';
-      icon = <DoneIcon style={{ color: '#fff' }} />;
+      icon = <DoneIcon style={{ color: '#fff', fontSize: '1rem' }} />;
       break;
     default:
       status = 'Không xác định';
       color = '#ccc';
-      icon = <MoreHorizIcon style={{ color: '#fff' }} />;
+      icon = <MoreHorizIcon style={{ color: '#fff', fontSize: '1rem' }} />;
       break;
   }
 
