@@ -1,4 +1,6 @@
 import React from 'react';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
@@ -19,14 +21,13 @@ import { createProductRequest } from '../../redux/actions/product.action';
 import * as types from '../../redux/types';
 import { SketchPicker } from 'react-color';
 import { getCategoriesRequest } from '../../redux/actions/category.action';
-import { useNavigate } from 'react-router-dom';
-import routes from '../../router/list.route';
+// import { useNavigate } from 'react-router-dom';
 import { showToastMsg } from '../../common/utils';
 
 function CreateProductForm({ onClick }) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const Input = styled('input')({
     display: 'none',
   });
@@ -57,7 +58,10 @@ function CreateProductForm({ onClick }) {
     colors,
   } = state;
 
+  console.log(state);
+
   const [error, setError] = React.useState('');
+
   const handleInputChange = (e) => {
     setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -175,6 +179,7 @@ function CreateProductForm({ onClick }) {
         autoClose: 2000,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productSelector]);
 
   return (
@@ -193,6 +198,7 @@ function CreateProductForm({ onClick }) {
               value={state.name}
               label="Tên sản phẩm"
               type="text"
+              uppercase
               name="name"
               variant="outlined"
               onChange={handleInputChange}
@@ -211,33 +217,89 @@ function CreateProductForm({ onClick }) {
             />
           </Grid>
           <Grid item xs={6}>
-            <TextareaAutosize
+            {/* <TextareaAutosize
               minRows={5}
-              value={state.specifications}
+              value={state.specifications || ''}
               placeholder="Thông số kỹ thuật"
               name="specifications"
               className={classes.textArea}
               onChange={handleInputChange}
+            /> */}
+            <InputLabel id="demo-simple-select-label">
+              Thông số kỹ thuật
+            </InputLabel>
+            <CKEditor
+              editor={ClassicEditor}
+              name="specifications"
+              data={state.specifications || ''}
+              className={classes.textArea}
+              onChange={(e, editor) => {
+                setState((prev) => {
+                  const data = editor.getData();
+                  return {
+                    ...prev,
+                    specifications: data,
+                  };
+                });
+              }}
             />
           </Grid>
           <Grid item xs={6}>
-            <TextareaAutosize
+            {/* <TextareaAutosize
               minRows={5}
-              value={state.accessories}
+              value={state.accessories || ''}
               name="accessories"
               placeholder="Phụ kiện đi kèm"
               className={classes.textArea}
               onChange={handleInputChange}
+            /> */}
+
+            <InputLabel id="demo-simple-select-label">
+              Phụ kiện đi kèm
+            </InputLabel>
+            <CKEditor
+              editor={ClassicEditor}
+              name="accessories"
+              data={state.accessories || ''}
+              className={classes.textArea}
+              onChange={(e, editor) => {
+                setState((prev) => {
+                  const data = editor.getData();
+                  return {
+                    ...prev,
+                    accessories: data,
+                  };
+                });
+              }}
             />
           </Grid>
           <Grid item xs={12}>
-            <TextareaAutosize
+            {/* <TextareaAutosize
               minRows={5}
-              value={state.description}
+              value={state.description || ''}
               name="description"
               placeholder="Mô tả"
               className={classes.textArea}
               onChange={handleInputChange}
+            /> */}
+
+            <InputLabel id="demo-simple-select-label">
+              Mô tả sản phẩm
+            </InputLabel>
+            <CKEditor
+              editor={ClassicEditor}
+              name="description"
+              data={state.description || ''}
+              className={classes.textArea}
+              onChange={(e, editor) => {
+                setState((prev) => {
+                  const data = editor.getData();
+                  return {
+                    ...prev,
+                    description: data,
+                  };
+                });
+              }}
             />
           </Grid>
           <Grid item xs={6}>

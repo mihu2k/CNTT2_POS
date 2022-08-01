@@ -1,5 +1,7 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import TextField from '@mui/material/TextField';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import InputLabel from '@mui/material/InputLabel';
@@ -50,7 +52,11 @@ function UpdateProductForm({ onClick, id }) {
   const handleInputChange = (e) => {
     setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-
+  const handleCkEditorChange = (e, editor) => {
+    const data = editor.getData();
+    console.log(data, 'data');
+    setState((prev) => ({ ...prev, [name]: [data] }));
+  };
   const [colorList, setColorList] = React.useState([]);
 
   const handleSubmit = (e) => {
@@ -168,33 +174,89 @@ function UpdateProductForm({ onClick, id }) {
             />
           </Grid>
           <Grid item xs={6}>
-            <TextareaAutosize
+            {/* <TextareaAutosize
               minRows={5}
               value={state.specifications || ''}
               placeholder="Thông số kỹ thuật"
               name="specifications"
               className={classes.textArea}
               onChange={handleInputChange}
+            /> */}
+            <InputLabel id="demo-simple-select-label">
+              Thông số kỹ thuật
+            </InputLabel>
+            <CKEditor
+              editor={ClassicEditor}
+              name="specifications"
+              data={state.specifications || ''}
+              className={classes.textArea}
+              onChange={(e, editor) => {
+                setState((prev) => {
+                  const data = editor.getData();
+                  return {
+                    ...prev,
+                    specifications: data,
+                  };
+                });
+              }}
             />
           </Grid>
           <Grid item xs={6}>
-            <TextareaAutosize
+            {/* <TextareaAutosize
               minRows={5}
               value={state.accessories || ''}
               name="accessories"
               placeholder="Phụ kiện đi kèm"
               className={classes.textArea}
               onChange={handleInputChange}
+            /> */}
+
+            <InputLabel id="demo-simple-select-label">
+              Phụ kiện đi kèm
+            </InputLabel>
+            <CKEditor
+              editor={ClassicEditor}
+              name="accessories"
+              data={state.accessories || ''}
+              className={classes.textArea}
+              onChange={(e, editor) => {
+                setState((prev) => {
+                  const data = editor.getData();
+                  return {
+                    ...prev,
+                    accessories: data,
+                  };
+                });
+              }}
             />
           </Grid>
           <Grid item xs={12}>
-            <TextareaAutosize
+            {/* <TextareaAutosize
               minRows={5}
               value={state.description || ''}
               name="description"
               placeholder="Mô tả"
               className={classes.textArea}
               onChange={handleInputChange}
+            /> */}
+
+            <InputLabel id="demo-simple-select-label">
+              Mô tả sản phẩm
+            </InputLabel>
+            <CKEditor
+              editor={ClassicEditor}
+              name="description"
+              data={state.description || ''}
+              className={classes.textArea}
+              onChange={(e, editor) => {
+                setState((prev) => {
+                  const data = editor.getData();
+                  return {
+                    ...prev,
+                    description: data,
+                  };
+                });
+              }}
             />
           </Grid>
           <Grid item xs={6}>
