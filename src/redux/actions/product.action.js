@@ -26,12 +26,13 @@ export const createProductRequest = (data) => async (dispatch) => {
   }
 };
 
-export const deleteProductRequest = (id) => async (dispatch) => {
+export const deleteProductRequest = (id, cb) => async (dispatch) => {
   dispatch({ type: types.DELETE_PRODUCT_REQUEST });
 
   try {
     const response = await ProductService.delete(id);
     dispatch({ type: types.DELETE_PRODUCT_SUCCESS, payload: response });
+    cb();
   } catch (error) {
     dispatch({ type: types.DELETE_PRODUCT_FAILURE, payload: error });
   }

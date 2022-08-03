@@ -110,11 +110,14 @@ function ProductsTable() {
       setEditProduct(true);
       setIdProduct(id);
     };
-    const handleDeleteClick = () => {
+    const handleDeleteClick = async () => {
       console.log(id);
       if (window.confirm('Bạn muốn xóa sản phẩm này?')) {
-        dispatch(deleteProductRequest(id));
-        dispatch(getProductsRequest(query));
+        dispatch(
+          deleteProductRequest(id, () =>
+            fetchProducts({ search: searchQuery, ...query, page: 1 }),
+          ),
+        );
       }
     };
     return (
@@ -158,6 +161,8 @@ function ProductsTable() {
   React.useEffect(() => {
     fetchProducts({ ...query, search: searchQuery });
   }, [query]);
+
+  console.log('----1------');
 
   return (
     <>
