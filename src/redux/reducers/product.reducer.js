@@ -79,11 +79,9 @@ export default function productReducer(state = initialState, action) {
         status: types.DELETE_PRODUCT_REQUEST,
       };
     case types.DELETE_PRODUCT_SUCCESS: {
-      const products = action.payload.data?.data ?? [];
       return {
         ...state,
         status: types.DELETE_PRODUCT_SUCCESS,
-        products,
       };
     }
     case types.DELETE_PRODUCT_FAILURE:
