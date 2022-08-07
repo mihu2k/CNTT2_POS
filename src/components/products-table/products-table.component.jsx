@@ -202,7 +202,7 @@ function ProductsTable() {
                 </IconButton>
               </Paper>
             </div>
-            <div className={classes.filterSelectWrap}>
+            {/* <div className={classes.filterSelectWrap}>
               <FormControl sx={{ m: 1 }} className={classes.filterSelect}>
                 <InputLabel id="demo-simple-select-helper-label-brand">
                   Chọn nhãn hiệu
@@ -262,7 +262,7 @@ function ProductsTable() {
                   <MenuItem value={40}>Tên: Z đến A</MenuItem>
                 </Select>
               </FormControl>
-            </div>
+            </div> */}
           </div>
 
           <div style={{ height: 400, width: '100%' }}>

@@ -1,5 +1,4 @@
 import { useStyles } from './home-page.style';
-
 import DashBoard from '../../components/dashboard-body';
 import SideBar from '../../components/side-bar';
 function HomePage() {
