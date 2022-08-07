@@ -60,16 +60,15 @@ export default function Products() {
             </Breadcrumbs>
             <Stack spacing={2} direction="row" className={classes.buttonWrap}>
               <Button
-                variant="contained"
+                variant="outlined"
                 onClick={() => {
                   setOpenAddProduct(true);
                 }}
               >
-                <AddRoundedIcon />
                 Thêm sản phẩm
               </Button>
-              <Button variant="outlined">Tạo mã vạch</Button>
-              <Button variant="outlined">Nhập xuất Excel</Button>
+              {/* <Button variant="outlined">Tạo mã vạch</Button>
+              <Button variant="outlined">Nhập xuất Excel</Button> */}
             </Stack>
           </div>
         ) : (
