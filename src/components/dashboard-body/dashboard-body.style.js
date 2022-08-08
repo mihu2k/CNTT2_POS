@@ -24,7 +24,7 @@ export const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
     width: '100%',
     justifyContent: 'space-around',
-    marginBottom: '20px',
+    marginBottom: '28px',
   },
 
   dashboardCard: {
@@ -32,7 +32,7 @@ export const useStyles = makeStyles((theme) => ({
     minHeight: '125px',
     padding: '20px',
     borderRadius: '4px',
-    marginTop: '20px',
+    marginTop: '8px',
     border: '1px solid #ddd',
     backgroundColor: '#fff',
   },
