@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { FormControlLabel } from '@material-ui/core';
 import EditIcon from '@mui/icons-material/Edit';
@@ -14,25 +14,33 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { formatDateTime } from '../../common/utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { getEmployeesRequest } from '../../redux/actions/user.action';
+import { Chip } from '@mui/material';
+import { EmployeeForm } from '../employee';
 
 function EmployeeTable() {
   const classes = useStyles();
-  const [employee, setEmployee] = React.useState([]);
+  const dispatch = useDispatch();
+
   const [addEmployee, setAddEmployee] = React.useState(false);
-  const [role, setRole] = React.useState('');
+  const [dataUser, setDataUser] = React.useState(null);
 
-  const handleChangeRole = (event) => {
-    setRole(event.target.value);
-  };
+  const [query, setQuery] = React.useState({
+    page: 1,
+    per_page: 5,
+  });
 
-  const ordersColumns = [
+  const { user: userSelector } = useSelector((state) => state);
+
+  const usersColumns = [
     {
       field: 'id',
       headerName: 'ID',
       width: 70,
     },
     {
-      field: 'userName',
+      field: 'username',
       headerName: 'Tên đăng nhập',
       flex: 1,
     },
@@ -42,7 +50,7 @@ function EmployeeTable() {
       flex: 1,
     },
     {
-      field: 'fullName',
+      field: 'full_name',
       headerName: 'Tên nhân viên',
       flex: 1,
     },
@@ -50,6 +58,12 @@ function EmployeeTable() {
       field: 'role',
       headerName: 'Vai trò',
       flex: 1,
+      valueFormatter: ({ value }) =>
+        value === 'employee'
+          ? 'Nhân viên'
+          : value === 'admin'
+          ? 'Quản trị viên'
+          : 'Khách hàng',
     },
     {
       field: 'created_at',
@@ -58,12 +72,23 @@ function EmployeeTable() {
       valueFormatter: ({ value }) => formatDateTime(value),
     },
     {
+      field: 'isActive',
+      headerName: 'Trạng thái',
+      flex: 1,
+      renderCell: (params) =>
+        params?.row?.isActive ? (
+          <Chip label="Active" color="success" style={{ minWidth: '80px' }} />
+        ) : (
+          <Chip label="InActive" color="error" style={{ minWidth: '80px' }} />
+        ),
+    },
+    {
       field: 'actions',
       headerName: 'Thao tác',
       sortable: false,
       width: 120,
       disableClickEventBubbling: true,
-      align: 'right',
+      align: 'center',
       renderCell: (params) => {
         return (
           <div style={{ cursor: 'pointer' }}>
@@ -74,15 +99,17 @@ function EmployeeTable() {
     },
   ];
 
+  const handleCloseForm = () => {
+    setAddEmployee(false);
+    fetchEmployee(query);
+  };
+
   const EmployeeAction = ({ data }) => {
     const handleEditClick = () => {
-      // some action
-      console.log(data);
+      setDataUser(data);
+      setAddEmployee(true);
     };
-    const handleDeleteClick = () => {
-      // some action
-      console.log(data);
-    };
+    const handleDeleteClick = () => {};
 
     return (
       <div>
@@ -99,7 +126,7 @@ function EmployeeTable() {
           }
         />
 
-        <FormControlLabel
+        {/* <FormControlLabel
           control={
             <IconButton
               color="secondary"
@@ -110,16 +137,18 @@ function EmployeeTable() {
               <DeleteIcon />
             </IconButton>
           }
-        />
+        /> */}
       </div>
     );
   };
 
-  const fetchEmployee = () => {};
+  const fetchEmployee = (query = {}) => {
+    dispatch(getEmployeesRequest(query));
+  };
 
   React.useEffect(() => {
-    fetchEmployee();
-  }, []);
+    fetchEmployee(query);
+  }, [query]);
 
   return (
     <div className={classes.content}>
@@ -130,6 +159,7 @@ function EmployeeTable() {
           <Button
             variant="contained"
             onClick={() => {
+              setDataUser(null);
               setAddEmployee(true);
             }}
           >
@@ -139,6 +169,7 @@ function EmployeeTable() {
           <Button
             variant="outlined"
             onClick={() => {
+              setDataUser(null);
               setAddEmployee(false);
             }}
           >
@@ -150,98 +181,26 @@ function EmployeeTable() {
       <div style={{ height: 400, width: '100%' }}>
         {!addEmployee ? (
           <DataGrid
-            rows={employee}
-            columns={ordersColumns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
+            rows={userSelector.users?.map((item, index) => ({
+              ...item,
+              id: index + 1 + query.per_page * (query.page - 1),
+            }))}
+            columns={usersColumns}
+            pageSize={query.per_page}
+            rowsPerPageOptions={[5, 10]}
+            onPageChange={(newPage) =>
+              setQuery((prev) => ({ ...prev, page: Number(newPage) + 1 }))
+            }
+            onPageSizeChange={(newPage) =>
+              setQuery((prev) => ({ ...prev, per_page: newPage }))
+            }
+            rowCount={userSelector.totalRecord}
+            pagination
+            paginationMode="server"
+            page={query?.page - 1}
           />
         ) : (
-          <Grid item xs={12} className={classes.invoiceWrapper}>
-            <form autoComplete="off" method="post">
-              <div className={classes.content}>
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    <TextField
-                      autoComplete="off"
-                      fullWidth
-                      label="Tên Nhân viên"
-                      variant="outlined"
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      fullWidth
-                      label="Địa chỉ email"
-                      variant="outlined"
-                    />
-                  </Grid>
-
-                  <Grid item xs={6}>
-                    <TextField
-                      autoComplete="off"
-                      type="number"
-                      fullWidth
-                      label="Số điện thoại"
-                      variant="outlined"
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <FormControl fullWidth>
-                      <InputLabel id="select-role-label">Chức vụ</InputLabel>
-                      <Select
-                        labelId="select-role-label"
-                        id="select-role"
-                        value={role}
-                        label="Chức vụ"
-                        onChange={handleChangeRole}
-                      >
-                        <MenuItem value={10}>Nhân viên</MenuItem>
-                        <MenuItem value={20}>Quản lý</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <TextField
-                      autoComplete="off"
-                      fullWidth
-                      label="Địa chỉ"
-                      variant="outlined"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      autoComplete="off"
-                      fullWidth
-                      label="Tên đăng nhập"
-                      variant="outlined"
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      autoComplete="off"
-                      fullWidth
-                      label="Mật khẩu"
-                      type="password"
-                      variant="outlined"
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      autoComplete="off"
-                      fullWidth
-                      label="Xác nhận mật khẩu"
-                      type="password"
-                      variant="outlined"
-                    />
-                  </Grid>
-                  <Grid item xs={12} mt={2} className={classes.actionBtns}>
-                    <Button variant="contained">Tạo nhân viên mới</Button>
-                  </Grid>
-                </Grid>
-              </div>
-            </form>
-          </Grid>
+          <EmployeeForm onCloseForm={handleCloseForm} data={dataUser} />
         )}
       </div>
     </div>
