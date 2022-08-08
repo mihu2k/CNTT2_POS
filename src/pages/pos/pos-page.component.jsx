@@ -28,6 +28,7 @@ import useDebounce from '../../hooks/useDebounce';
 import { getProductsRequest } from '../../redux/actions/product.action';
 import { createOrderRequest } from '../../redux/actions/order.action';
 import * as types from '../../redux/types';
+import Loading from '../../components/loading/loading.component';
 
 const phoneRegExp = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
 const emailRegExp =
@@ -36,7 +37,7 @@ const emailRegExp =
 function Pos() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [query, setQuery] = React.useState({ search: '', per_page: 10 });
+  const [query, setQuery] = React.useState({ search: '', per_page: 9 });
   const [productsOrder, setProductsOrder] = React.useState([]);
   const {
     product: productReducer,
@@ -168,17 +169,20 @@ function Pos() {
                 next={() => {
                   setQuery((prev) => ({
                     ...query,
-                    per_page: prev.per_page + 10,
+                    per_page: prev.per_page + 9,
                   }));
                   fetchProducts({
                     ...query,
-                    per_page: query.per_page + 10,
+                    per_page: query.per_page + 9,
                   });
                 }}
                 hasMore={
                   productReducer.products?.length < productReducer.totalRecord
                 }
-                loader={<h4>Loading...</h4>}
+                // loader={<Loading />}
+                // loader={<h4>Loading...</h4>}
+                // scrollThreshold={1}
+                height="calc(100vh - 60px)"
               >
                 {isLoading ? (
                   'Loading'

@@ -25,6 +25,7 @@ import { Outlet, Link } from 'react-router-dom';
 // component
 import User from '../../components/user';
 import routes from '../../router/list.route';
+import { useSelector } from 'react-redux';
 
 const drawerWidth = 240;
 
@@ -99,6 +100,8 @@ function SideBar({ children, onClick }) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+
+  const { auth: authSelector } = useSelector((state) => state);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -195,17 +198,25 @@ function SideBar({ children, onClick }) {
           </List>
         </Link>
         <Divider />
-        <Link to={routes.employee}>
-          <List>
-            <ListItem button className={classes.sideBarBtn} onClick={onClick}>
-              <ListItemIcon>
-                <GroupIcon />
-              </ListItemIcon>
-              <ListItemText primary="Nhân viên" />
-            </ListItem>
-          </List>
-        </Link>
-        <Divider />
+        {authSelector.profile?.role === 'admin' && (
+          <>
+            <Link to={routes.employee}>
+              <List>
+                <ListItem
+                  button
+                  className={classes.sideBarBtn}
+                  onClick={onClick}
+                >
+                  <ListItemIcon>
+                    <GroupIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Nhân viên" />
+                </ListItem>
+              </List>
+            </Link>
+            <Divider />
+          </>
+        )}
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />

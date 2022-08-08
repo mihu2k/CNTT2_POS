@@ -114,7 +114,6 @@ function UpdateProductForm({ onClick, id }) {
           });
         }),
       );
-      console.log(formData, '---formData---');
       setError('');
     }
   };

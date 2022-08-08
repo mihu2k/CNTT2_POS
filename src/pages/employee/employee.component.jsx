@@ -4,12 +4,16 @@ import { emphasize, styled } from '@mui/material/styles';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Chip from '@mui/material/Chip';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 // pages
 import SideBar from '../../components/side-bar';
 import EmployeeTable from '../../components/employee-table';
+import routes from '../../router/list.route';
 
 function Employee() {
   const classes = useStyles();
+  const navigate = useNavigate();
   const StyledBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
       theme.palette.mode === 'light'
@@ -30,10 +34,16 @@ function Employee() {
     };
   });
 
+  const { auth: authSelector } = useSelector((state) => state);
+
   function handleClick(event) {
     event.preventDefault();
     console.info('You clicked a breadcrumb.');
   }
+
+  React.useEffect(() => {
+    if (authSelector.profile?.role === 'employee') navigate(routes.dashboard);
+  }, [authSelector]);
 
   return (
     <SideBar>
