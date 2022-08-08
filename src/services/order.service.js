@@ -39,4 +39,8 @@ export const OrderService = {
     });
     return response;
   },
+
+  async getStatistic() {
+    return await httpRequest.get('/order/statistic');
+  },
 };

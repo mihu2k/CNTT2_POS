@@ -13,7 +13,7 @@ const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<ProtectedRoutes />}>
-        <Route path="dashboard" element={<HomePage />} />
+        <Route index path="dashboard" element={<HomePage />} />
         <Route path="pos" element={<PosPage />} />
         <Route path="products" element={<ProductsPage />} />
         <Route path="orders" element={<OrdersPage />} />
@@ -23,7 +23,7 @@ const AppRouter = () => {
       </Route>
 
       <Route path="/" element={<PublicRoutes />}>
-        <Route index path="login" element={<SignInSide />} />
+        <Route path="login" element={<SignInSide />} />
       </Route>
     </Routes>
   );
