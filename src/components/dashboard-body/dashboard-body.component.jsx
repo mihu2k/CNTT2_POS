@@ -2,13 +2,11 @@ import React from 'react';
 import { numberWithCommas } from '../../common/utils';
 import { OrderService } from '../../services/order.service';
 import Chart from '../line-chart/line-chart.component';
-import Loading from '../loading/loading.component';
 import { useStyles } from './dashboard-body.style';
 
 function ReportField() {
   const classes = useStyles();
   const [data, setData] = React.useState(null);
-  const [loading, setLoading] = React.useState(false);
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
 
@@ -59,11 +57,9 @@ function ReportField() {
   }, [data, currentMonth]);
 
   const fetchStatistic = () => {
-    setLoading(true);
     OrderService.getStatistic()
       .then(({ data }) => {
         setData(data);
-        setLoading(false);
       })
       .catch((err) => {
         // console.log(err);
@@ -76,64 +72,58 @@ function ReportField() {
 
   return (
     <div className={classes.dashboard}>
-      {loading ? (
-        <Loading />
-      ) : (
-        <>
-          <div className={classes.dashboardHeader}>
-            <h3>BÁO CÁO TỔNG QUAN</h3>
-          </div>
-          <div className={classes.dashboardBody}>
-            <div className={classes.dashboardContent}>
-              <div className={classes.dashboardCard}>
-                <div className={classes.metricLabel}>
-                  <span className={classes.dashboardCardTitle}>
-                    Doanh thu trong tháng (VNĐ)
-                  </span>
-                  {/* <ArrowDropDownIcon /> */}
-                </div>
-                <span className={classes.metricValue}>
-                  {numberWithCommas(revenueByMonth)}
-                </span>
-              </div>
-              <div className={classes.dashboardCard}>
-                <div className={classes.metricLabel}>
-                  <span className={classes.dashboardCardTitle}>
-                    Doanh số trong năm (VNĐ)
-                  </span>
-                  {/* <ArrowDropDownIcon /> */}
-                </div>
-                <span className={classes.metricValue}>
-                  {numberWithCommas(revenueByYear)}&nbsp;
-                </span>
-              </div>
-              <div className={classes.dashboardCard}>
-                <div className={classes.metricLabel}>
-                  <span className={classes.dashboardCardTitle}>
-                    Đơn hàng hoàn thành (Web)
-                  </span>
-                  {/* <ArrowDropDownIcon /> */}
-                </div>
-                <span className={classes.metricValue}>
-                  {numberWithCommas(data?.totalCompleteOrder ?? 0)}
-                </span>
-              </div>
-              <div className={classes.dashboardCard}>
-                <div className={classes.metricLabel}>
-                  <span className={classes.dashboardCardTitle}>
-                    Đơn hàng hoàn thành (POS)
-                  </span>
-                  {/* <ArrowDropDownIcon /> */}
-                </div>
-                <span className={classes.metricValue}>
-                  {numberWithCommas(data?.totalCompleteOrderPos ?? 0)}
-                </span>
-              </div>
+      <div className={classes.dashboardHeader}>
+        <h3>BÁO CÁO TỔNG QUAN</h3>
+      </div>
+      <div className={classes.dashboardBody}>
+        <div className={classes.dashboardContent}>
+          <div className={classes.dashboardCard}>
+            <div className={classes.metricLabel}>
+              <span className={classes.dashboardCardTitle}>
+                Doanh thu trong tháng (VNĐ)
+              </span>
+              {/* <ArrowDropDownIcon /> */}
             </div>
-            <Chart revenueData={data} />
+            <span className={classes.metricValue}>
+              {numberWithCommas(revenueByMonth)}
+            </span>
           </div>
-        </>
-      )}
+          <div className={classes.dashboardCard}>
+            <div className={classes.metricLabel}>
+              <span className={classes.dashboardCardTitle}>
+                Doanh số trong năm (VNĐ)
+              </span>
+              {/* <ArrowDropDownIcon /> */}
+            </div>
+            <span className={classes.metricValue}>
+              {numberWithCommas(revenueByYear)}&nbsp;
+            </span>
+          </div>
+          <div className={classes.dashboardCard}>
+            <div className={classes.metricLabel}>
+              <span className={classes.dashboardCardTitle}>
+                Đơn hàng hoàn thành (Web)
+              </span>
+              {/* <ArrowDropDownIcon /> */}
+            </div>
+            <span className={classes.metricValue}>
+              {numberWithCommas(data?.totalCompleteOrder ?? 0)}
+            </span>
+          </div>
+          <div className={classes.dashboardCard}>
+            <div className={classes.metricLabel}>
+              <span className={classes.dashboardCardTitle}>
+                Đơn hàng hoàn thành (POS)
+              </span>
+              {/* <ArrowDropDownIcon /> */}
+            </div>
+            <span className={classes.metricValue}>
+              {numberWithCommas(data?.totalCompleteOrderPos ?? 0)}
+            </span>
+          </div>
+        </div>
+        <Chart revenueData={data} />
+      </div>
     </div>
   );
 }
