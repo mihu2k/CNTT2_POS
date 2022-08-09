@@ -187,8 +187,8 @@ export default function OrderDetails({ order }) {
                 </MenuItem>
                 {orderStatusConfig
                   .filter((status) => status.value > order?.status)
-                  .filter(
-                    (status) => order?.shipMethod === 1 && status.value !== 2,
+                  .filter((status) =>
+                    order?.shipMethod === 1 ? status.value !== 2 : true,
                   )
                   .map((status) => (
                     <MenuItem key={status.value} value={status.value}>

@@ -31,6 +31,7 @@ export const showToastMsg = (type = 'info', msg, options = {}) => {
  * @returns {string} dd/MM/YYYY HH:mm
  */
 export function formatDateTime(timestamp) {
+  if (!timestamp) return '';
   const m = new Date(timestamp);
   const dateString =
     ('0' + m.getDate()).slice(-2) +
@@ -51,9 +52,7 @@ export function formatDateTime(timestamp) {
  */
 export function showTextOrderStatus(statusCode) {
   let status = '',
-    icon = (
-      <HourglassBottomIcon style={{ color: '#fff' , fontSize: '1rem' }} />
-    ),
+    icon = <HourglassBottomIcon style={{ color: '#fff', fontSize: '1rem' }} />,
     color = '#f6dd00';
   switch (Number(statusCode)) {
     case 0:
