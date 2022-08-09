@@ -11,7 +11,9 @@ export default function App() {
 
   React.useEffect(() => {
     localStorage.getItem('token')
-      ? navigate(location.pathname)
+      ? navigate(
+          location.pathname === '/' ? routes.dashboard : location.pathname,
+        )
       : navigate(routes.login);
   }, []);
 
