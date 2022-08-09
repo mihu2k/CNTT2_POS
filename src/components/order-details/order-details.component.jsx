@@ -58,9 +58,41 @@ export default function OrderDetails({ order }) {
           <TableHead>
             <TableRow>
               <TableCell colSpan={6}>
-                <Typography variant="h5" fontWeight={600}>
-                  CHI TIẾT ĐƠN HÀNG
-                </Typography>
+                <div className={classes.settingBtns}>
+                  {/* <Button variant="contained">Hủy đơn hàng</Button> */}
+                  {/* <Button variant="outlined" onClick={handlePrintOrder}>
+                    In đơn hàng
+                  </Button> */}
+                  {order?.status !== 3 && (
+                    <FormControl>
+                      <InputLabel id="order-status-settings">
+                        Thiết lập trạng thái
+                      </InputLabel>
+                      <Select
+                        className={classes.settingStatusBtn}
+                        labelId="order-status-settings"
+                        value={orderStatus}
+                        label="Thiết lập trạng thái"
+                        onChange={handleChangeOrderStatus}
+                      >
+                        <MenuItem key="default" value="default">
+                          ---Chọn trạng thái---
+                        </MenuItem>
+                        {orderStatusConfig
+                          .filter((status) => status.value > order?.status)
+                          .filter(
+                            (status) =>
+                              order?.shipMethod === 1 && status.value !== 2,
+                          )
+                          .map((status) => (
+                            <MenuItem key={status.value} value={status.value}>
+                              {status.name}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    </FormControl>
+                  )}
+                </div>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -165,40 +197,6 @@ export default function OrderDetails({ order }) {
             </TableRow>
           </TableBody>
         </Table>
-        <div className={classes.settingBtns}>
-          <Button variant="contained">Hủy đơn hàng</Button>
-          <Button variant="outlined" onClick={handlePrintOrder}>
-            In đơn hàng
-          </Button>
-          {order?.status !== 3 && (
-            <FormControl>
-              <InputLabel id="order-status-settings">
-                Thiết lập trạng thái
-              </InputLabel>
-              <Select
-                className={classes.settingStatusBtn}
-                labelId="order-status-settings"
-                value={orderStatus}
-                label="Thiết lập trạng thái"
-                onChange={handleChangeOrderStatus}
-              >
-                <MenuItem key="default" value="default">
-                  ---Chọn trạng thái---
-                </MenuItem>
-                {orderStatusConfig
-                  .filter((status) => status.value > order?.status)
-                  .filter(
-                    (status) => order?.shipMethod === 1 && status.value !== 2,
-                  )
-                  .map((status) => (
-                    <MenuItem key={status.value} value={status.value}>
-                      {status.name}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
-          )}
-        </div>
       </TableContainer>
     </Grid>
   );

@@ -7,6 +7,7 @@ import SideBar from '../../../components/side-bar';
 import routes from '../../../router/list.route';
 import { useStyles } from './orders-table-pos.style';
 import { getOrderByIdOfPosRequest } from '../../../redux/actions/order.action';
+import Typography from '@mui/material/Typography';
 
 export function OrderDetailForPos() {
   const classes = useStyles();
@@ -28,8 +29,10 @@ export function OrderDetailForPos() {
     <SideBar>
       <div className={classes.content}>
         <div className={classes.filterWrapper}>
-          <div className={classes.filterSearchWrap} />
-
+          <Typography variant="h5" fontWeight={600}>
+            CHI TIẾT ĐƠN HÀNG
+          </Typography>
+         
           <div className={classes.filterSelectWrap}>
             <Button variant="outlined" onClick={() => navigate(routes.orders)}>
               Quay lại
