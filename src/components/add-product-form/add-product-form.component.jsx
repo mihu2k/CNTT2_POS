@@ -58,7 +58,7 @@ function CreateProductForm({ onClick }) {
     colors,
   } = state;
 
-  console.log(state);
+  // console.log(state);
 
   const [error, setError] = React.useState('');
 

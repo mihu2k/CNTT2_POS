@@ -48,7 +48,7 @@ function ProductsTable() {
       ...prevState,
       [name]: value,
     }));
-    console.log(category);
+    // console.log(category);
   };
 
   const columns = [
@@ -111,7 +111,7 @@ function ProductsTable() {
       setIdProduct(id);
     };
     const handleDeleteClick = async () => {
-      console.log(id);
+      // console.log(id);
       if (window.confirm('Bạn muốn xóa sản phẩm này?')) {
         dispatch(
           deleteProductRequest(id, () =>
@@ -162,7 +162,7 @@ function ProductsTable() {
     fetchProducts({ ...query, search: searchQuery });
   }, [query]);
 
-  console.log('----1------');
+  // console.log('----1------');
 
   return (
     <>

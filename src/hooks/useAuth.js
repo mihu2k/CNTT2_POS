@@ -5,7 +5,7 @@ const useAuth = async () => {
 
   if (token) {
     const user = await AuthService.checkToken(token);
-    console.log(user, 'USER');
+    // console.log(user, 'USER');
     return true;
   } else {
     return false;

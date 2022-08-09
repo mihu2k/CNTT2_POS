@@ -7,13 +7,13 @@ export const ProductService = {
       params: query,
       paramsSerializer: (params) => qs.stringify(params),
     });
-    console.log(response, 'RESPONSE');
+    // console.log(response, 'RESPONSE');
     return response;
   },
 
   async getProduct(id) {
     const response = await httpRequest.get(`/product/${id}`);
-    console.log(response, 'GET SINGLE PRODUCT');
+    // console.log(response, 'GET SINGLE PRODUCT');
     return response;
   },
 
