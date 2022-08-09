@@ -1,6 +1,7 @@
 import { showToastMsg } from '../../common/utils';
 import { OrderService } from '../../services/order.service';
 import * as types from '../types';
+import { trackPromise } from 'react-promise-tracker';
 
 export const createOrderRequest =
   (data, cb = () => {}) =>
@@ -8,7 +9,7 @@ export const createOrderRequest =
     dispatch({ type: types.CREATE_ORDER_REQUEST });
 
     try {
-      const response = await OrderService.create(data);
+      const response = await trackPromise(OrderService.create(data));
       dispatch({ type: types.CREATE_ORDER_SUCCESS, payload: response });
       cb();
     } catch (error) {
@@ -20,7 +21,7 @@ export const getAllOrdersOfPosRequest = (query) => async (dispatch) => {
   dispatch({ type: types.GET_ALL_ORDERS_POS_REQUEST });
 
   try {
-    const response = await OrderService.getAllForPos(query);
+    const response = await trackPromise(OrderService.getAllForPos(query));
     dispatch({ type: types.GET_ALL_ORDERS_POS_SUCCESS, payload: response });
   } catch (error) {
     dispatch({ type: types.GET_ALL_ORDERS_POS_FAILURE, payload: error });
@@ -31,7 +32,7 @@ export const getAllOrdersRequest = (query) => async (dispatch) => {
   dispatch({ type: types.GET_ALL_ORDERS_REQUEST });
 
   try {
-    const response = await OrderService.getAll(query);
+    const response = await trackPromise(OrderService.getAll(query));
     dispatch({ type: types.GET_ALL_ORDERS_SUCCESS, payload: response });
   } catch (error) {
     dispatch({ type: types.GET_ALL_ORDERS_FAILURE, payload: error });
@@ -53,7 +54,7 @@ export const getOrderByIdOfPosRequest = (id) => async (dispatch) => {
   dispatch({ type: types.GET_ORDER_POS_BY_ID_REQUEST });
 
   try {
-    const response = await OrderService.getOneByIdForPos(id);
+    const response = await trackPromise(OrderService.getOneByIdForPos(id));
     dispatch({ type: types.GET_ORDER_POS_BY_ID_SUCCESS, payload: response });
   } catch (error) {
     dispatch({ type: types.GET_ORDER_POS_BY_ID_FAILURE, payload: error });
@@ -65,7 +66,9 @@ export const updateOrderStatusRequest =
     dispatch({ type: types.UPDATE_ORDER_STATUS_REQUEST });
 
     try {
-      const response = await OrderService.updateStatus(orderId, status);
+      const response = await trackPromise(
+        OrderService.updateStatus(orderId, status),
+      );
       dispatch({ type: types.UPDATE_ORDER_STATUS_SUCCESS, payload: response });
       showToastMsg('success', 'Cập nhật trạng thái thành công.', {
         toastId: orderId,

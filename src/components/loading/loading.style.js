@@ -10,7 +10,7 @@ export const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, .1)',
+    backgroundColor: 'rgba(0, 0, 0, .2)',
     zIndex: 1201,
   },
 }));

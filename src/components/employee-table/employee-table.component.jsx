@@ -1,23 +1,16 @@
-import React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
 import { FormControlLabel } from '@material-ui/core';
+import { blue } from '@material-ui/core/colors';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { blue, red } from '@material-ui/core/colors';
-import { useStyles } from './employee-table.style';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { formatDateTime } from '../../common/utils';
-import { useDispatch, useSelector } from 'react-redux';
-import { getEmployeesRequest } from '../../redux/actions/user.action';
 import { Chip } from '@mui/material';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import { DataGrid } from '@mui/x-data-grid';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { formatDateTime } from '../../common/utils';
+import { getEmployeesRequest } from '../../redux/actions/user.action';
 import { EmployeeForm } from '../employee';
+import { useStyles } from './employee-table.style';
 
 function EmployeeTable() {
   const classes = useStyles();

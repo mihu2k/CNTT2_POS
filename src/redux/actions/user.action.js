@@ -1,5 +1,5 @@
+import { trackPromise } from 'react-promise-tracker';
 import { showToastMsg } from '../../common/utils';
-import { ProductService } from '../../services/product.service';
 import { UserService } from '../../services/user.service';
 import * as types from '../types';
 
@@ -7,7 +7,7 @@ export const getEmployeesRequest = (query) => async (dispatch) => {
   dispatch({ type: types.GET_EMPLOYEES_REQUEST });
 
   try {
-    const response = await UserService.getEmployees(query);
+    const response = await trackPromise(UserService.getEmployees(query));
     dispatch({ type: types.GET_EMPLOYEES_SUCCESS, payload: response });
   } catch (error) {
     dispatch({ type: types.GET_EMPLOYEES_FAILURE, payload: error });
@@ -20,7 +20,7 @@ export const createEmployeeRequest =
     dispatch({ type: types.CREATE_EMPLOYEE_REQUEST });
 
     try {
-      const response = await UserService.createEmployee(data);
+      const response = await trackPromise(UserService.createEmployee(data));
       dispatch({ type: types.CREATE_EMPLOYEE_SUCCESS, payload: response });
       showToastMsg('success', 'Tạo thành công.', {
         toastId: 'MH',
@@ -36,25 +36,15 @@ export const createEmployeeRequest =
     }
   };
 
-// export const deleteProductRequest = (id, cb) => async (dispatch) => {
-//   dispatch({ type: types.DELETE_PRODUCT_REQUEST });
-
-//   try {
-//     const response = await ProductService.delete(id);
-//     dispatch({ type: types.DELETE_PRODUCT_SUCCESS, payload: response });
-//     cb();
-//   } catch (error) {
-//     dispatch({ type: types.DELETE_PRODUCT_FAILURE, payload: error });
-//   }
-// };
-
 export const updateEmployeeRequest =
   (id, updateData, cb = () => {}) =>
   async (dispatch) => {
     dispatch({ type: types.UPDATE_EMPLOYEE_REQUEST });
 
     try {
-      const response = await UserService.updateEmployee(id, updateData);
+      const response = await trackPromise(
+        UserService.updateEmployee(id, updateData),
+      );
       dispatch({ type: types.UPDATE_EMPLOYEE_SUCCESS, payload: response });
       showToastMsg('success', 'Cập nhật thành công.', {
         toastId: id,

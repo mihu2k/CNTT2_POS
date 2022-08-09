@@ -1,31 +1,22 @@
-import React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { FormControlLabel } from '@material-ui/core';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { blue, red } from '@material-ui/core/colors';
-import { useStyles } from './employee-form.style';
-import TextField from '@mui/material/TextField';
+import { yupResolver } from '@hookform/resolvers/yup';
 import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { formatDateTime } from '../../../common/utils';
+import TextField from '@mui/material/TextField';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
+import * as yup from 'yup';
 import {
   createEmployeeRequest,
-  getEmployeesRequest,
   updateEmployeeRequest,
 } from '../../../redux/actions/user.action';
-import { Chip } from '@mui/material';
-import * as yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as types from '../../../redux/types';
 import Loading from '../../loading/loading.component';
+import { useStyles } from './employee-form.style';
 
 const schema = yup.object().shape({
   username: yup
