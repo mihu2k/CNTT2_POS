@@ -1,13 +1,11 @@
 import * as React from 'react';
 
 import { useStyles } from './product-box.style';
-import { useRef } from 'react';
 // import { numberWithCommas } from '../../common/utils';
 import cx from 'classnames';
 
-import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
 import { Button, Grid } from '@mui/material';
+import 'react-toastify/dist/ReactToastify.css';
 import { numberWithCommas } from '../../common/utils';
 
 export default function ProductBox({ product, onPush }) {

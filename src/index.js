@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import configureStore from './redux/store';
 import { Provider } from 'react-redux';
+import Loading from './components/loading/loading.component';
 
 const store = configureStore();
 
@@ -14,6 +15,7 @@ ReactDOM.render(
     <BrowserRouter>
       <Provider store={store}>
         <App />
+        <Loading />
       </Provider>
     </BrowserRouter>
   </React.StrictMode>,

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -14,21 +14,18 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
-import DeleteIcon from '@mui/icons-material/Delete';
-import User from '../../components/user';
-import { useStyles } from './pos-page.style';
+import * as React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
 import { useReactToPrint } from 'react-to-print';
-import 'react-toastify/dist/ReactToastify.css';
 import { numberWithCommas, showToastMsg } from '../../common/utils';
 import { ComponentToPrint } from '../../components/print-recipt/ComponentToPrint';
 import ProductBox from '../../components/product-box/product-box.component';
+import User from '../../components/user';
 import useDebounce from '../../hooks/useDebounce';
-import { getProductsRequest } from '../../redux/actions/product.action';
 import { createOrderRequest } from '../../redux/actions/order.action';
-import * as types from '../../redux/types';
-import Loading from '../../components/loading/loading.component';
+import { getProductsRequest } from '../../redux/actions/product.action';
+import { useStyles } from './pos-page.style';
 
 const phoneRegExp = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
 const emailRegExp =
@@ -50,7 +47,6 @@ function Pos() {
     setSelectUser(event.target.value);
   };
   // end invoice cpn
-  const [isLoading, setIsLoading] = React.useState(false);
   const [infoCustomer, setInfoCustomer] = React.useState({
     email: '',
     address: '',
@@ -184,29 +180,25 @@ function Pos() {
                 // scrollThreshold={1}
                 height="calc(100vh - 60px)"
               >
-                {isLoading ? (
-                  'Loading'
-                ) : (
-                  <div className={classes.containerRow}>
-                    <Grid container spacing={2}>
-                      {productReducer.products?.length > 0 ? (
-                        productReducer.products?.map((product) => (
-                          <ProductBox
-                            key={product._id}
-                            product={product}
-                            onPush={handlePushToOrder}
-                          />
-                        ))
-                      ) : (
-                        <p style={{ marginTop: '20px' }}>
-                          {query.search
-                            ? 'Không tìm thấy sản phẩm nào.'
-                            : 'Chưa có sản phẩm nào.'}
-                        </p>
-                      )}
-                    </Grid>
-                  </div>
-                )}
+                <div className={classes.containerRow}>
+                  <Grid container spacing={2}>
+                    {productReducer.products?.length > 0 ? (
+                      productReducer.products?.map((product) => (
+                        <ProductBox
+                          key={product._id}
+                          product={product}
+                          onPush={handlePushToOrder}
+                        />
+                      ))
+                    ) : (
+                      <p style={{ marginTop: '20px' }}>
+                        {query.search
+                          ? 'Không tìm thấy sản phẩm nào.'
+                          : 'Chưa có sản phẩm nào.'}
+                      </p>
+                    )}
+                  </Grid>
+                </div>
               </InfiniteScroll>
             </Grid>
 

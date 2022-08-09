@@ -1,28 +1,25 @@
-import React from 'react';
-import { useStyles } from './order-details.style';
-import Paper from '@mui/material/Paper';
+import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Paper from '@mui/material/Paper';
+import Select from '@mui/material/Select';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import {
   formatDateTime,
   numberWithCommas,
   showTextOrderStatus,
-  showToastMsg,
 } from '../../common/utils';
-import { Typography } from '@mui/material';
 import { orderStatusConfig } from '../../config/order-status.config';
-import { useDispatch } from 'react-redux';
 import { updateOrderStatusRequest } from '../../redux/actions/order.action';
+import { useStyles } from './order-details.style';
 
 export default function OrderDetails({ order }) {
   const classes = useStyles();
@@ -42,12 +39,12 @@ export default function OrderDetails({ order }) {
     setOrderStatus('default');
   };
 
-  const handlePrintOrder = () => {
-    showToastMsg('warning', 'Chức năng chưa hoàn thành.', {
-      toastId: 'MH',
-      autoClose: 2500,
-    });
-  };
+  // const handlePrintOrder = () => {
+  //   showToastMsg('warning', 'Chức năng chưa hoàn thành.', {
+  //     toastId: 'MH',
+  //     autoClose: 2500,
+  //   });
+  // };
 
   // console.log(order, 'ORDER');
 

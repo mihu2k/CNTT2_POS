@@ -1,4 +1,8 @@
-import React from 'react';
+import { blue, red } from '@material-ui/core/colors';
+import DeleteIcon from '@mui/icons-material/Delete';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import SendIcon from '@mui/icons-material/Send';
 import {
   Button,
   Grid,
@@ -12,15 +16,9 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { blue, red } from '@material-ui/core/colors';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import RefreshIcon from '@mui/icons-material/Refresh';
+import React from 'react';
 import { HuePicker, SketchPicker } from 'react-color';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import SendIcon from '@mui/icons-material/Send';
 import { useSelector } from 'react-redux';
-import { ProductService } from '../../services/product.service';
 import { showToastMsg } from '../../common/utils';
 
 export default function ColorList({ colorList, getColorList }) {

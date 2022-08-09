@@ -1,26 +1,22 @@
-import * as React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
 import { FormControlLabel } from '@material-ui/core';
-import SearchIcon from '@mui/icons-material/Search';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { blue, red } from '@material-ui/core/colors';
-import { useStyles } from './products-table.style';
-import Paper from '@mui/material/Paper';
-import InputBase from '@mui/material/InputBase';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import SearchIcon from '@mui/icons-material/Search';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import InputBase from '@mui/material/InputBase';
+import Paper from '@mui/material/Paper';
+import { DataGrid } from '@mui/x-data-grid';
+import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatDateTime, numberWithCommas } from '../../common/utils';
-import {
-  getProductsRequest,
-  deleteProductRequest,
-} from '../../redux/actions/product.action';
 import EditProductForm from '../../components/edit-product-form';
+import {
+  deleteProductRequest,
+  getProductsRequest,
+} from '../../redux/actions/product.action';
+import { useStyles } from './products-table.style';
 
 function ProductsTable() {
   const classes = useStyles();
@@ -34,22 +30,6 @@ function ProductsTable() {
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const { product: productSelector } = useSelector((state) => state);
-
-  // const [isLoading, setIsLoading] = React.useState(false);
-  const [category, setCategory] = React.useState({
-    brand: '',
-    status: '',
-    filter: '',
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCategory((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-    // console.log(category);
-  };
 
   const columns = [
     {

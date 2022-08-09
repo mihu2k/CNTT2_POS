@@ -1,21 +1,15 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  useNavigate,
-} from 'react-router-dom';
-import { useStyles } from './user.style';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import routes from '../../router/list.route';
+import * as React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   checkTokenRequest,
   logoutRequest,
 } from '../../redux/actions/auth.action';
-import { useDispatch, useSelector } from 'react-redux';
+import routes from '../../router/list.route';
+import { useStyles } from './user.style';
 
 function User() {
   const classes = useStyles();

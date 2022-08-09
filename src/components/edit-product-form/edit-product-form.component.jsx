@@ -1,23 +1,22 @@
-import * as React from 'react';
-import Grid from '@mui/material/Grid';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import TextField from '@mui/material/TextField';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import Grid from '@mui/material/Grid';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import Button from '@mui/material/Button';
-import { useStyles } from './edit-product-form.style';
+import TextField from '@mui/material/TextField';
+import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { showToastMsg } from '../../common/utils';
+import { getCategoriesRequest } from '../../redux/actions/category.action';
 import {
   getProductRequest,
   updateProductRequest,
 } from '../../redux/actions/product.action';
-import { getCategoriesRequest } from '../../redux/actions/category.action';
+import { useStyles } from './edit-product-form.style';
 import ColorList from './list-color.component';
-import { showToastMsg } from '../../common/utils';
 
 function UpdateProductForm({ onClick, id }) {
   const classes = useStyles();
@@ -52,11 +51,11 @@ function UpdateProductForm({ onClick, id }) {
   const handleInputChange = (e) => {
     setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-  const handleCkEditorChange = (e, editor) => {
-    const data = editor.getData();
-    // console.log(data, 'data');
-    setState((prev) => ({ ...prev, [name]: [data] }));
-  };
+  // const handleCkEditorChange = (e, editor) => {
+  //   const data = editor.getData();
+  //   // console.log(data, 'data');
+  //   setState((prev) => ({ ...prev, [name]: [data] }));
+  // };
   const [colorList, setColorList] = React.useState([]);
 
   const handleSubmit = (e) => {
