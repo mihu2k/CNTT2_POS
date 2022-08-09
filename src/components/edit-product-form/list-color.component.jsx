@@ -111,9 +111,9 @@ export default function ColorList({ colorList, getColorList }) {
       });
   }, [colorList]);
 
-  console.log(colors, '---COLORS---');
-  console.log(productSelector, '---productSelector---');
-  console.log(colorList, '---productSelector colorList---');
+  // console.log(colors, '---COLORS---');
+  // console.log(productSelector, '---productSelector---');
+  // console.log(colorList, '---productSelector colorList---');
 
   return (
     <>
@@ -273,7 +273,7 @@ function SelectColorHex({ color, onChangeColorList }) {
   };
 
   const handleSubmitColor = (color) => {
-    console.log(color);
+    // console.log(color);
     onChangeColorList(color);
   };
 

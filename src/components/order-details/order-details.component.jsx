@@ -49,7 +49,7 @@ export default function OrderDetails({ order }) {
     });
   };
 
-  console.log(order, 'ORDER');
+  // console.log(order, 'ORDER');
 
   return (
     <Grid item xs={12} className={classes.invoiceWrapper}>

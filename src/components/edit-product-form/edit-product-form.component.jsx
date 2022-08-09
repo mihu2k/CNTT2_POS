@@ -54,7 +54,7 @@ function UpdateProductForm({ onClick, id }) {
   };
   const handleCkEditorChange = (e, editor) => {
     const data = editor.getData();
-    console.log(data, 'data');
+    // console.log(data, 'data');
     setState((prev) => ({ ...prev, [name]: [data] }));
   };
   const [colorList, setColorList] = React.useState([]);
