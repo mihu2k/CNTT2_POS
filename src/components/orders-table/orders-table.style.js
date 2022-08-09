@@ -67,5 +67,6 @@ export const useStyles = makeStyles((theme) => ({
 
   settingStatusBtn: {
     minWidth: '200px',
+    paddingBottom: '60px',
   },
 }));
