@@ -95,6 +95,7 @@ export const useStyles = makeStyles((theme) => ({
 
   recieptPaper: {
     margin: '50px',
+    overflowX: 'hidden',
   },
 
   actionsBtns: {

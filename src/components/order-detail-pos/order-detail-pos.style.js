@@ -62,10 +62,9 @@ export const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'flex-end',
     gap: '20px',
-    margin: '20px',
   },
 
   settingStatusBtn: {
-    minWidth: '200px',
+    minWidth: '100px',
   },
 }));

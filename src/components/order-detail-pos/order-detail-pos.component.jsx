@@ -32,13 +32,15 @@ export default function OrderDetailsForPos({ order }) {
       <TableContainer component={Paper} className={classes.invoice}>
         <Table aria-label="spanning table">
           <TableHead>
-            <TableRow>
+            {/* <TableRow>
               <TableCell colSpan={6}>
-                <Typography variant="h5" fontWeight={600}>
-                  CHI TIẾT ĐƠN HÀNG
-                </Typography>
+                <div className={classes.settingBtns}>
+                  <Button variant="contained" onClick={handlePrintOrder}>
+                    In đơn hàng
+                  </Button>
+                </div>
               </TableCell>
-            </TableRow>
+            </TableRow> */}
             <TableRow>
               <TableCell colSpan={6}>
                 <p>Mã đơn hàng:&nbsp;{order?.code}</p>
@@ -138,11 +140,6 @@ export default function OrderDetailsForPos({ order }) {
             </TableRow>
           </TableBody>
         </Table>
-        <div className={classes.settingBtns}>
-          <Button variant="contained" onClick={handlePrintOrder}>
-            In đơn hàng
-          </Button>
-        </div>
       </TableContainer>
     </Grid>
   );

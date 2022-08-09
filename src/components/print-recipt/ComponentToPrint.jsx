@@ -42,7 +42,11 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
           </p>
         </div>
       </div>
-      <TableContainer component={Paper} className={classes.invoice}>
+      <TableContainer
+        component={Paper}
+        className={classes.invoice}
+        sx={{ overflowX: 'hidden' }}
+      >
         <Table sx={{ minWidth: 700 }} aria-label="spanning table">
           <TableHead>
             <TableRow>
