@@ -38,34 +38,4 @@ export const useStyles = makeStyles((theme) => ({
       fontSize: '0.9rem',
     },
   },
-
-  filterSelectWrap: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  filterSelect: {
-    '& .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root': {
-      fontSize: '0.9rem',
-    },
-    '& .MuiOutlinedInput-root.MuiInputBase-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root':
-      {
-        minWidth: '200px',
-        maxHeight: '50px',
-      },
-    '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input':
-      {
-        padding: '14px',
-      },
-  },
-
-  settingBtns: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    gap: '20px',
-    margin: '20px',
-  },
-
-  settingStatusBtn: {
-    minWidth: '200px',
-  },
 }));

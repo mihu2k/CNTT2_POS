@@ -44,18 +44,13 @@ export const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
   },
   filterSelect: {
-    '& .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root': {
-      fontSize: '0.9rem',
+    '& .MuiInputBase-root': {
+      minWidth: '200px',
+      maxHeight: '50px',
     },
-    '& .MuiOutlinedInput-root.MuiInputBase-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root':
-      {
-        minWidth: '200px',
-        maxHeight: '50px',
-      },
-    '& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input':
-      {
-        padding: '14px',
-      },
+    '& .MuiSelect-select': {
+      padding: '14px',
+    },
   },
 
   settingBtns: {
